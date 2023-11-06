@@ -28,14 +28,15 @@ axios.interceptors.response.use(
 
                 const axiosConfig = {
                     headers: {
-                        Authorization: 'Basic ' + btoa(APP_CLIENT_ID + ':' + APP_CLIENT_SECRET)
+                        Authorization: 'Basic ' + btoa(APP_CLIENT_ID + ':' + APP_CLIENT_SECRET),
+                        'Content-Type': 'application/json'
                     }
                 };
 
                 if (tokenParts.exp > now) {
                     return axios
                         .post(
-                            `${BACKEND_API_GATEWAY_URL}/api/account/oauth/token?grant_type=refresh_token&refresh_token=${refreshToken}`,
+                            `${BACKEND_API_GATEWAY_URL}/account/oauth/token?refresh_token=${refreshToken}`,
                             null,
                             axiosConfig
                         )
@@ -84,12 +85,12 @@ export const postLoginApi = async (loginRequestBody) => {
     const axiosConfig = {
         headers: {
             'Authorization': 'Basic ' + btoa(APP_CLIENT_ID + ':' + APP_CLIENT_SECRET),
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/json'
         }
     };
-    const loginRequestBodyEncoded = qs.stringify(loginRequestBody);
+    //const loginRequestBodyEncoded = qs.stringify(loginRequestBody);
     const responseData = await axios
-        .post(`${BACKEND_API_GATEWAY_URL}/api/account/oauth/token`, loginRequestBodyEncoded, axiosConfig)
+        .post(`${BACKEND_API_GATEWAY_URL}/account/oauth/token`, loginRequestBody, axiosConfig)
         .then((response) => {
             return response.data;
         });
@@ -98,7 +99,8 @@ export const postLoginApi = async (loginRequestBody) => {
 
 export const getUserInfoApi = async () => {
     const axiosConfig = getAxiosConfig();
-    const responseData = await axios.get(`${BACKEND_API_GATEWAY_URL}/api/account/userInfo`, axiosConfig).then((response) => {
+    const responseData = await axios.get(`${BACKEND_API_GATEWAY_URL}/appUsers/userInfo`, axiosConfig)
+        .then((response) => {
         return response.data;
     });
     return responseData;
@@ -106,7 +108,8 @@ export const getUserInfoApi = async () => {
 
 export const getUserApi = async (userId) => {
     const axiosConfig = getAxiosConfig();
-    const responseData = await axios.get(`${BACKEND_API_GATEWAY_URL}/api/account/user?userId=${userId}`, axiosConfig).then((response) => {
+    const responseData = await axios.get(`${BACKEND_API_GATEWAY_URL}/api/account/user?userId=${userId}`, axiosConfig)
+        .then((response) => {
         return response.data;
     });
     return responseData;
@@ -254,32 +257,48 @@ export const getAllBooksDetailApi = async (pageNumber) => {
     const responseData = axios.get(`${BACKEND_API_GATEWAY_URL}/books`).then((response) => {
         return response.data;
     });
+    console.log(responseData);
     return responseData;
 };
 
 export const addToCartApi = async (addToCartRequestBody) => {
     const axiosConfig = getAxiosConfig();
+    console.log("here on to cart position");
+    console.log(addToCartRequestBody);
     const responseData = axios
-        .post(`${BACKEND_API_GATEWAY_URL}/api/order/cart/cartItem`, addToCartRequestBody, axiosConfig)
+        .post(`${BACKEND_API_GATEWAY_URL}/positions/carts`, addToCartRequestBody, axiosConfig)
         .then((response) => {
             return response.data;
         });
     return responseData;
 };
 
-export const getCartDetailsApi = async () => {
+export const addPositionApi = async (addPositionBody) => {
     const axiosConfig = getAxiosConfig();
-    const cartDetails = await axios.get(`${BACKEND_API_GATEWAY_URL}/api/order/cart`, axiosConfig).then((response) => {
+    console.log("here on position");
+    console.log(addPositionBody);
+    const responseData = axios
+        .post(`${BACKEND_API_GATEWAY_URL}/positions`, addPositionBody, axiosConfig)
+        .then((response) => {
+            return response.data;
+        });
+    return responseData;
+};
+
+
+export const getCartDetailsApi = async (cartId) => {
+    const axiosConfig = getAxiosConfig();
+    const cartDetails = await axios.get(`${BACKEND_API_GATEWAY_URL}/carts/${cartId}`, axiosConfig).then((response) => {
         return response.data;
     });
 
     let sortedCart = {
         ...cartDetails,
-        cartItems: cartDetails.cartItems.sort((a, b) => {
-            return a.cartItemId.localeCompare(b.cartItemId);
+        cartItems: cartDetails.orderPositions.sort((a, b) => {
+            return a.id.localeCompare(b.id);
         })
     };
-
+    console.log(sortedCart);
     return sortedCart;
 };
 
@@ -376,9 +395,14 @@ const getAxiosConfig = () => {
     const axiosConfig = {
         headers: {
             'Content-Type': 'application/json',
+            'Accept':'*/*',
             'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-            'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE'
+            'Access-Control-Allow-Headers': '*',
+            'Access-Control-Allow-Methods': '*'
+
+            //'Access-Control-Allow-Origin': '*',
+            // 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+            // 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE'
 
         }
     };

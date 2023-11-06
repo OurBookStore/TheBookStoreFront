@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap';
 import Message from '../components/Message';
 import CartItem from '../components/CartItem';
-import { addToCartAction, getCartDetailsAction } from '../actions/cartActions';
+import {addPosition, addToCartAction, getCartDetailsAction} from '../actions/cartActions';
 import FullPageLoader from '../components/FullPageLoader';
 import { LinkContainer } from 'react-router-bootstrap';
 
@@ -33,15 +33,38 @@ const CartScreen = (props) => {
   }, [dispatch, productId, qty, userInfo]);
 
   const addToCart = (pId, q) => {
-    const addToCartRequestBody = {
-      productId: pId || productId,
-      quantity: q || qty
+    console.log(`Info of count ${q}`);
+    console.log(`Info of id ${pId}`);
+    console.log(`Info of id 2 ${productId}`);
+    console.log(`Info of count 2 ${qty}`);
+
+    const addPositionRequestBody = {
+      bookId: pId === undefined ? productId: pId,
+      count: q === undefined ? qty : q
     };
-    dispatch(addToCartAction(addToCartRequestBody));
+    console.log(userLogin.userInfo.cartId);
+    console.log(addPositionRequestBody);
+    const promisePositionId = dispatch(addPosition(addPositionRequestBody));
+    promisePositionId.then(function (positionId){
+      console.log("info nice", positionId);
+      const addToCartPositionRequestBody = {
+        orderPositionId: positionId,
+        cartId: userLogin.userInfo.cartId
+      };
+      dispatch(addToCartAction(addToCartPositionRequestBody));
+    }, function (error){
+          console.log("info err", error);
+    });
+    // console.log(positionId);
+    //
+    // const addToCartPositionRequestBody = {
+    //   orderPositionId: positionId,
+    //   cartId: userLogin.userInfo.cartId
+    // };
   };
 
   const getCartDetail = () => {
-    dispatch(getCartDetailsAction());
+    dispatch(getCartDetailsAction(userLogin.userInfo.cartId));
   };
 
   const checkoutHandler = () => {
@@ -66,7 +89,7 @@ const CartScreen = (props) => {
               ) : (
                 <ListGroup.Item variant='flush'>
                   {cart?.cartItems?.map((item) => (
-                    <CartItem key={item.productId} item={item} addToCart={addToCart}></CartItem>
+                    <CartItem key={item.id} item={item} addToCart={addToCart}></CartItem>
                   ))}
                 </ListGroup.Item>
               )}

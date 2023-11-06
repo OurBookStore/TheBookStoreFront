@@ -11,10 +11,10 @@ import {
   CART_SAVE_PAYMENT_METHOD,
   CART_DETAILS_REQUEST,
   CART_DETAILS_SUCCESS,
-  CART_DETAILS_FAIL
+  CART_DETAILS_FAIL, POSITION_ADD_ITEM_REQUEST, POSITION_ADD_ITEM_SUCCESS, POSITION_ADD_ITEM_FAIL
 } from '../constants/cartConstants';
 import { getErrorMessage } from '../service/CommonUtils';
-import { addToCartApi, getCartDetailsApi, removeCartItemApi } from '../service/RestApiCalls';
+import {addPositionApi, addToCartApi, getCartDetailsApi, removeCartItemApi} from '../service/RestApiCalls';
 
 export const addToCartAction = (addToCartRequestBody) => async (dispatch) => {
   try {
@@ -29,7 +29,7 @@ export const addToCartAction = (addToCartRequestBody) => async (dispatch) => {
     });
 
     //Get Cart Details
-    dispatch(getCartDetailsAction());
+    dispatch(getCartDetailsAction(addToCartRequestBody.cartId));
   } catch (error) {
     dispatch({
       type: CART_ADD_ITEM_FAIL,
@@ -38,13 +38,34 @@ export const addToCartAction = (addToCartRequestBody) => async (dispatch) => {
   }
 };
 
-export const getCartDetailsAction = () => async (dispatch) => {
+export const addPosition = (addPositionRequestBody) => async (dispatch) => {
+  try {
+    dispatch({
+      type: POSITION_ADD_ITEM_REQUEST
+    });
+    console.log(addPositionRequestBody);
+    //Add to cart Api
+    let response  = await addPositionApi(addPositionRequestBody);
+    console.log("end create");
+    dispatch({
+      type: POSITION_ADD_ITEM_SUCCESS
+    });
+    return response;
+  } catch (error) {
+    dispatch({
+      type: POSITION_ADD_ITEM_FAIL,
+      payload: getErrorMessage(error)
+    });
+  }
+};
+
+export const getCartDetailsAction = (cartId) => async (dispatch) => {
   try {
     dispatch({
       type: CART_DETAILS_REQUEST
     });
     //Get cart details Api
-    const cartResponse = await getCartDetailsApi();
+    const cartResponse = await getCartDetailsApi(cartId);
     dispatch({
       type: CART_DETAILS_SUCCESS,
       payload: cartResponse

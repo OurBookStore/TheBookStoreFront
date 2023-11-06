@@ -38,6 +38,7 @@ import {
   deleteProductApi,
   getImageApi
 } from '../service/RestApiCalls';
+import {logout} from "./userActions";
 
 export const listProductsAction = (pageNumber) => async (dispatch) => {
   try {

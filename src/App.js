@@ -1,4 +1,5 @@
 import { Container } from 'react-bootstrap';
+import React, { Component }  from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import './App.css';
 import UserListScreen from './screens/UserListScreen';
@@ -37,7 +38,7 @@ function App() {
           <Route path='/shipping' component={ShippingScreen}></Route>
           <Route path='/userProfile' component={ProfileScreen} />
           <Route path='/register' component={RegisterScreen}></Route>
-          <Route path='/product/:id' component={ProductScreen}></Route>
+          {/*<Route path='/product/:id' component={ProductScreen}></Route>*/}
           <Route path='/book/:id' component={BookScreen}></Route>
           <Route path='/cart/:id?' component={CartScreen}></Route>
           <Route path='/admin/userlist' component={UserListScreen} />

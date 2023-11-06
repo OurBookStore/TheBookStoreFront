@@ -30,21 +30,6 @@ const ProductScreen = (props) => {
   const productReviewCreate = useSelector((state) => state.productReviewCreate);
   const { success: successProductReview, loading: loadingProductReview, error: errorProductReview } = productReviewCreate;
 
-  // const { createProxyMiddleware } = require('http-proxy-middleware');
-  //
-  // module.exports = (app) => {
-  //   app.use(
-  //       '/proxy',
-  //       createProxyMiddleware({
-  //         target: `${BACKEND_API_GATEWAY_URL}`,
-  //         changeOrigin: true,
-  //         pathRewrite: {
-  //           '/proxy': '/',
-  //         },
-  //       })
-  //   );
-  // };
-
   useEffect(async () => {
     // setProductimageBase64(null);
     // dispatch(listProductDetailsAction(props.match.params.id));
@@ -60,6 +45,8 @@ const ProductScreen = (props) => {
   }, [dispatch, product?.imageId]);
 
   const addToCartHandler = () => {
+    console.log(`Число: ${qty}`);
+    console.log(`Хрен занеат что: ${props.match.params.id}`);
     props.history.push(`/cart/${props.match.params.id}?qty=${qty}`);
   };
 
@@ -152,7 +139,7 @@ const ProductScreen = (props) => {
                   )}
 
                   <ListGroupItem>
-                    <Button onClick={addToCartHandler} className='btn-block' type='button' disabled={product.availableItemCount <= 0}>
+                    <Button onClick={addToCartHandler} className='btn-block' type='button' disabled={product.count <= 0}>
                       Add to Cart
                     </Button>
                   </ListGroupItem>

@@ -38,6 +38,8 @@ import {
     deleteProductApi,
     getImageApi, getBookDetailApi, getAllBooksDetailApi
 } from '../service/RestApiCalls';
+import {logout} from "./userActions";
+import {listProductDetailsAction} from "./productActions";
 
 export const listBooksAction = (pageNumber) => async (dispatch) => {
     try {
@@ -124,7 +126,6 @@ export const createProductReviewAction = (createProductReviewRequestBody) => asy
             type: PRODUCT_CREATE_REVIEW_SUCCESS
         });
         dispatch(listProductDetailsAction(createProductReviewRequestBody.productId));
-        dispatch(listProductReviewsAction(createProductReviewRequestBody.productId));
     } catch (error) {
         dispatch({
             type: PRODUCT_CREATE_REVIEW_FAIL,

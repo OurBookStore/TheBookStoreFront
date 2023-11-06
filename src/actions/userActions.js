@@ -44,7 +44,6 @@ export const login = (usernameOrEmail, password) => async (dispatch) => {
     });
 
     const loginRequest = {
-      grant_type: 'password',
       username: usernameOrEmail,
       password: password
     };
