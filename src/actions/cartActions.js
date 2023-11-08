@@ -14,7 +14,13 @@ import {
   CART_DETAILS_FAIL, POSITION_ADD_ITEM_REQUEST, POSITION_ADD_ITEM_SUCCESS, POSITION_ADD_ITEM_FAIL
 } from '../constants/cartConstants';
 import { getErrorMessage } from '../service/CommonUtils';
-import {addPositionApi, addToCartApi, getCartDetailsApi, removeCartItemApi} from '../service/RestApiCalls';
+import {
+  addPositionApi,
+  addToCartApi,
+  getCartDetailsApi,
+  getCartDetailsApiByUserId,
+  removeCartItemApi
+} from '../service/RestApiCalls';
 
 export const addToCartAction = (addToCartRequestBody) => async (dispatch) => {
   try {
@@ -43,7 +49,7 @@ export const addPosition = (addPositionRequestBody) => async (dispatch) => {
     dispatch({
       type: POSITION_ADD_ITEM_REQUEST
     });
-    console.log(addPositionRequestBody);
+    console.log("Add position Req", addPositionRequestBody);
     //Add to cart Api
     let response  = await addPositionApi(addPositionRequestBody);
     console.log("end create");
@@ -65,6 +71,7 @@ export const getCartDetailsAction = (cartId) => async (dispatch) => {
       type: CART_DETAILS_REQUEST
     });
     //Get cart details Api
+    console.log("Get cartDetail req with id",cartId);
     const cartResponse = await getCartDetailsApi(cartId);
     dispatch({
       type: CART_DETAILS_SUCCESS,
@@ -78,20 +85,40 @@ export const getCartDetailsAction = (cartId) => async (dispatch) => {
   }
 };
 
-export const removeFromCartAction = (cartItemId) => async (dispatch) => {
+export const getCartDetailsActionByUserId = (userId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: CART_DETAILS_REQUEST
+    });
+    //Get cart details Api
+    console.log("Get cartDetail req with user id",userId);
+    const cartResponse = await getCartDetailsApiByUserId(userId);
+    dispatch({
+      type: CART_DETAILS_SUCCESS,
+      payload: cartResponse
+    });
+  } catch (error) {
+    dispatch({
+      type: CART_DETAILS_FAIL,
+      payload: getErrorMessage(error)
+    });
+  }
+};
+
+export const removeFromCartAction = (positionId,userId) => async (dispatch) => {
   try {
     dispatch({
       type: CART_REMOVE_ITEM_REQUEST
     });
     //Add to cart Api
-    await removeCartItemApi(cartItemId);
+    await removeCartItemApi(positionId);
 
     dispatch({
       type: CART_REMOVE_ITEM_SUCCESS
     });
 
     //Get Cart Details
-    dispatch(getCartDetailsAction());
+    dispatch(getCartDetailsApiByUserId(userId));
   } catch (error) {
     dispatch({
       type: CART_REMOVE_ITEM_FAIL,

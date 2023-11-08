@@ -21,15 +21,19 @@ const CartScreen = (props) => {
   const redirect = props.location.pathname + props.location.search;
 
   useEffect(() => {
+    console.log("Seek proops", props);
     if (userInfo === null || userInfo === undefined) {
       props.history.push(`/login?redirect=${redirect}`);
       return;
     }
+    console.log("Check productId before dead", productId);
+    console.log("info error", error);
     if (productId) {
       addToCart();
     } else {
       getCartDetail();
     }
+    console.log("info error", error);
   }, [dispatch, productId, qty, userInfo]);
 
   const addToCart = (pId, q) => {
@@ -42,11 +46,8 @@ const CartScreen = (props) => {
       bookId: pId === undefined ? productId: pId,
       count: q === undefined ? qty : q
     };
-    console.log(userLogin.userInfo.cartId);
-    console.log(addPositionRequestBody);
     const promisePositionId = dispatch(addPosition(addPositionRequestBody));
     promisePositionId.then(function (positionId){
-      console.log("info nice", positionId);
       const addToCartPositionRequestBody = {
         orderPositionId: positionId,
         cartId: userLogin.userInfo.cartId
@@ -55,41 +56,41 @@ const CartScreen = (props) => {
     }, function (error){
           console.log("info err", error);
     });
-    // console.log(positionId);
-    //
-    // const addToCartPositionRequestBody = {
-    //   orderPositionId: positionId,
-    //   cartId: userLogin.userInfo.cartId
-    // };
+    console.log("State", cartState);
+    console.log("Info cart",cart);
+    console.log("info error", error);
   };
 
   const getCartDetail = () => {
+    console.log("info error", error);
+    console.log("Check cart", cart);
     dispatch(getCartDetailsAction(userLogin.userInfo.cartId));
   };
 
   const checkoutHandler = () => {
+    console.log("info error", error);
     props.history.push('/login?redirect=shipping');
   };
 
   return (
     <>
-      {error ? (
-        <Message variant='danger'> {JSON.stringify(error.message)}</Message>
+      { error ? (
+        <Message variant='danger'> {JSON.stringify(error)}</Message>
       ) : (
         <>
           <Row>
-            <h1>Shopping Cart</h1>
+            <h1>Shopping Cart </h1>
           </Row>
           <Row>
             <Col md={8}>
               {cart == null || cart?.cartItems?.length == 0 ? (
-                <Message>
+                  <Message>
                   Your cart is empty <Link to='/'>Go Back</Link>
                 </Message>
               ) : (
                 <ListGroup.Item variant='flush'>
                   {cart?.cartItems?.map((item) => (
-                    <CartItem key={item.id} item={item} addToCart={addToCart}></CartItem>
+                    <CartItem key={item.id} item={item} addToCart={addToCart} props={props} ></CartItem>
                   ))}
                 </ListGroup.Item>
               )}
@@ -106,7 +107,7 @@ const CartScreen = (props) => {
                     <h3>Subtotal ({cart?.cartItems?.length}) Items</h3>
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    <h3>${cart?.totalPrice}</h3>
+                    <h3>${cart?.total}</h3>
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <Button type='button' className='btn-block' disabled={cart?.cartItems?.length === 0} onClick={checkoutHandler}>

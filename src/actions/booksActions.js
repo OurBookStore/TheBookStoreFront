@@ -63,6 +63,8 @@ export const listBooksDetailsAction = (productId) => async (dispatch) => {
     try {
         dispatch({ type: PRODUCT_DETAILS_REQUEST });
         //Get Product Detail
+
+        console.log("HAHAHHAHA");
         const productDetail = await getProductDetailApi(productId);
         dispatch({
             type: PRODUCT_DETAILS_SUCCESS,

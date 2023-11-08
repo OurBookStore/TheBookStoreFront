@@ -44,7 +44,8 @@ axios.interceptors.response.use(
                             const userInfo = JSON.parse(localStorage.getItem('userInfo'));
                             const updatedUserInfo = {
                                 ...userInfo,
-                                token: response.data.access_token
+                                token: response.data.access_token,
+                                refresh_token : response.data.refresh_token
                             };
                             localStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
                             axios.defaults.headers['Authorization'] = 'Bearer ' + response.data.access_token;
@@ -75,7 +76,7 @@ axios.interceptors.response.use(
 
 export const postSignupApi = (singupRequestBody) => {
     const axiosConfig = getAxiosConfig();
-    const responseData = axios.post(`${BACKEND_API_GATEWAY_URL}/api/account/signup`, singupRequestBody, axiosConfig).then((response) => {
+    const responseData = axios.post(`${BACKEND_API_GATEWAY_URL}/appUsers`, singupRequestBody, axiosConfig).then((response) => {
         return response.data;
     });
     return responseData;
@@ -118,7 +119,7 @@ export const getUserApi = async (userId) => {
 export const putUserInfoApi = async (userInfoRequestBody) => {
     const axiosConfig = getAxiosConfig();
     const responseData = await axios
-        .put(`${BACKEND_API_GATEWAY_URL}/api/account/userInfo`, userInfoRequestBody, axiosConfig)
+        .put(`${BACKEND_API_GATEWAY_URL}/appUsers`, userInfoRequestBody, axiosConfig)
         .then((response) => {
             return response.data;
         });
@@ -276,7 +277,6 @@ export const addToCartApi = async (addToCartRequestBody) => {
 export const addPositionApi = async (addPositionBody) => {
     const axiosConfig = getAxiosConfig();
     console.log("here on position");
-    console.log(addPositionBody);
     const responseData = axios
         .post(`${BACKEND_API_GATEWAY_URL}/positions`, addPositionBody, axiosConfig)
         .then((response) => {
@@ -291,20 +291,38 @@ export const getCartDetailsApi = async (cartId) => {
     const cartDetails = await axios.get(`${BACKEND_API_GATEWAY_URL}/carts/${cartId}`, axiosConfig).then((response) => {
         return response.data;
     });
-
+    console.log("Before error",cartDetails);
     let sortedCart = {
         ...cartDetails,
         cartItems: cartDetails.orderPositions.sort((a, b) => {
-            return a.id.localeCompare(b.id);
-        })
+            return a.id - b.id;
+            //for strings a.id.localeCompare(b.id)
+        }),
+        total : cartDetails.orderPositions.map(x => x.price).reduce((partialSum, a) => partialSum+ a, 0)
     };
-    console.log(sortedCart);
+    console.log("was got in cart api detaiol",sortedCart);
     return sortedCart;
 };
 
-export const removeCartItemApi = async (cartItemId) => {
+export const getCartDetailsApiByUserId = async (userId) => {
     const axiosConfig = getAxiosConfig();
-    const responseData = axios.delete(`${BACKEND_API_GATEWAY_URL}/api/order/cart/cartItem/${cartItemId}`, axiosConfig).then((response) => {
+    const cartDetails = await axios.get(`${BACKEND_API_GATEWAY_URL}/carts/app-user/${userId}`, axiosConfig).then((response) => {
+        return response.data;
+    });
+    let sortedCart = {
+        ...cartDetails,
+        cartItems: cartDetails.orderPositions.sort((a, b) => {
+            return a.id - b.id;
+            //for strings a.id.localeCompare(b.id)
+        })
+    };
+    return sortedCart;
+};
+
+export const removeCartItemApi = async (positionId) => {
+    const axiosConfig = getAxiosConfig();
+    const responseData = axios.delete(`${BACKEND_API_GATEWAY_URL}/positions/${positionId}`, axiosConfig)
+        .then((response) => {
         return response.data;
     });
     return responseData;
@@ -318,9 +336,9 @@ export const getAllOrdersApi = async () => {
     return responseData;
 };
 
-export const getAllMyOrdersApi = async () => {
+export const getAllMyOrdersApi = async (userId) => {
     const axiosConfig = getAxiosConfig();
-    const responseData = axios.get(`${BACKEND_API_GATEWAY_URL}/api/order/order/myorders`, axiosConfig).then((response) => {
+    const responseData = axios.get(`${BACKEND_API_GATEWAY_URL}/orders/appUsers/${userId}`, axiosConfig).then((response) => {
         return response.data;
     });
     return responseData;
