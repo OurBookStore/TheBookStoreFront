@@ -10,7 +10,7 @@ import { USER_REGISTER_RESET } from '../constants/userConstants';
 
 const RegisterScreen = (props) => {
   const [userName, setUserName] = useState('');
-  const [firstName, setFirstName] = useState('');
+  //const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setconfirmPassword] = useState('');
@@ -36,7 +36,7 @@ const RegisterScreen = (props) => {
       setMessage('Passwords do not match');
       dispatch({ type: USER_REGISTER_RESET });
     } else {
-      dispatch(register(userName, firstName, email, password));
+      dispatch(register(userName, email, password));
     }
   };
 
@@ -52,10 +52,10 @@ const RegisterScreen = (props) => {
             <Form.Control required placeholder='Username' value={userName} onChange={(e) => setUserName(e.target.value)}></Form.Control>
           </Form.Group>
 
-          <Form.Group controlId='firstName'>
-            <Form.Label>First Name</Form.Label>
-            <Form.Control required placeholder='First Name' value={firstName} onChange={(e) => setFirstName(e.target.value)}></Form.Control>
-          </Form.Group>
+          {/*<Form.Group controlId='firstName'>*/}
+          {/*  <Form.Label>First Name</Form.Label>*/}
+          {/*  <Form.Control required placeholder='First Name' value={firstName} onChange={(e) => setFirstName(e.target.value)}></Form.Control>*/}
+          {/*</Form.Group>*/}
 
           <Form.Group controlId='email'>
             <Form.Label>Email</Form.Label>

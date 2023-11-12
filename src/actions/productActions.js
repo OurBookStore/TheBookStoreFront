@@ -164,7 +164,6 @@ export const createProductAction = (productReqBody) => async (dispatch) => {
       type: PRODUCT_CREATE_REQUEST
     });
 
-    //Create Product
     await createProductApi(productReqBody);
 
     dispatch({

@@ -10,7 +10,7 @@ import Message from '../components/Message';
 import Rating from '../components/Rating';
 import {getBookDetailApi, getImageApi, getProductDetailApi} from '../service/RestApiCalls';
 
-const ProductScreen = (props) => {
+const BookScreen = (props) => {
   const [qty, setQty] = useState(1);
   const [rating, setRating] = useState(0);
   const [reviewMessage, setReviewMessage] = useState('');
@@ -33,6 +33,7 @@ const ProductScreen = (props) => {
   useEffect(async () => {
     // setProductimageBase64(null);
     // dispatch(listProductDetailsAction(props.match.params.id));
+    console.log("In Book api")
     await getBookDetailApi(props.match.params.id).then((r) => {
       setProduct(r);
     });
@@ -154,4 +155,4 @@ const ProductScreen = (props) => {
   );
 };
 
-export default ProductScreen;
+export default BookScreen;

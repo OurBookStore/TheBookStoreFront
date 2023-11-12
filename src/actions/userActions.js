@@ -83,7 +83,7 @@ export const logout = () => (dispatch) => {
   });
 };
 
-export const register = (userName, firstName, email, password) => async (dispatch) => {
+export const register = (userName, email, password) => async (dispatch) => {
   try {
     dispatch({
       type: USER_REGISTER_REQUEST
@@ -91,11 +91,9 @@ export const register = (userName, firstName, email, password) => async (dispatc
 
     //SignUp
     const signUpRequest = {
-      grant_type: 'password',
-      userName,
-      password,
-      firstName,
-      email
+      nickname: userName,
+      email: email,
+      password: password
     };
 
     //SignUp
@@ -103,7 +101,6 @@ export const register = (userName, firstName, email, password) => async (dispatc
 
     //Login
     const loginRequest = {
-      grant_type: 'password',
       username: userName,
       password: password
     };

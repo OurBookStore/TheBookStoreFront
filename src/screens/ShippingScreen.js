@@ -30,6 +30,7 @@ const ShippingScreen = ({ history }) => {
   const { success, loading: addressSaveLoading, error: addressSaveError } = addressSave;
 
   useEffect(() => {
+    console.log("Whe are in shiippuig")
     getShippingAddress();
     if (addresses?.length > 0) {
       setBillingAddressId(addresses[0].addressId);

@@ -69,14 +69,14 @@ export const listOrdersAdmin = () => async (dispatch) => {
   }
 };
 
-export const listMyOrdersAction = () => async (dispatch) => {
+export const listMyOrdersAction = (userId) => async (dispatch) => {
   try {
     dispatch({
       type: ORDER_LIST_MY_REQUEST
     });
 
     //Get All my Orders
-    const myOrdersData = await getAllMyOrdersApi();
+    const myOrdersData = await getAllMyOrdersApi(userId);
 
     dispatch({
       type: ORDER_LIST_MY_SUCCESS,

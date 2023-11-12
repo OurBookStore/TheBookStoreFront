@@ -11,6 +11,7 @@ import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants';
 const ProfileScreen = ({ history }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [nickname, setNickName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -34,7 +35,7 @@ const ProfileScreen = ({ history }) => {
     if (!userInfo) {
       history.push('/login');
     } else {
-      if (!user || !user.userName) {
+      if (!user || !user.nickname) {
         dispatch({ type: USER_UPDATE_PROFILE_RESET });
         dispatch(getUserDetails());
       } else {
@@ -43,7 +44,7 @@ const ProfileScreen = ({ history }) => {
         setEmail(user.email);
       }
     }
-    dispatch(listMyOrdersAction());
+    dispatch(listMyOrdersAction(userInfo.id));
   }, [dispatch, history, userInfo, user]);
 
   const userProfileUpdateHandler = (e) => {
@@ -52,7 +53,8 @@ const ProfileScreen = ({ history }) => {
     if (password !== confirmPassword) {
       setMessage('Passwords do not match');
     } else {
-      dispatch(updateUserProfile({ firstName, lastName, email, password }));
+      let id = userInfo.id;
+      dispatch(updateUserProfile({ id ,nickname, email, password }));
     }
   };
 
@@ -67,22 +69,22 @@ const ProfileScreen = ({ history }) => {
           <Form.Group controlId='firstName'>
             <Form.Label>First Name</Form.Label>
             <Form.Control
-              type='firstName'
-              placeholder='Enter First Name'
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              type='nickname'
+              placeholder='Enter nickname'
+              value={nickname}
+              onChange={(e) => setNickName(e.target.value)}
             ></Form.Control>
           </Form.Group>
 
-          <Form.Group controlId='lastName'>
-            <Form.Label>Last Name</Form.Label>
-            <Form.Control
-              type='lastName'
-              placeholder='Enter Last Name'
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
+          {/*<Form.Group controlId='lastName'>*/}
+          {/*  <Form.Label>Last Name</Form.Label>*/}
+          {/*  <Form.Control*/}
+          {/*    type='lastName'*/}
+          {/*    placeholder='Enter Last Name'*/}
+          {/*    value={lastName}*/}
+          {/*    onChange={(e) => setLastName(e.target.value)}*/}
+          {/*  ></Form.Control>*/}
+          {/*</Form.Group>*/}
 
           <Form.Group controlId='email'>
             <Form.Label>Email Address</Form.Label>

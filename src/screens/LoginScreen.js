@@ -18,7 +18,7 @@ const LoginScreen = (props) => {
 
   useEffect(() => {
     if (userInfo) {
-    // if (true) {
+      console.log("what'the fuck",redirect);
       props.history.push(redirect);
     }
   }, [props.history, userInfo, redirect]);
