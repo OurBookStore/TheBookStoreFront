@@ -15,9 +15,9 @@ import ShippingScreen from './screens/ShippingScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
-import ProductListScreen from './screens/ProductListScreen';
-import ProductEditScreen from './screens/ProductEditScreen';
-import ProductCreateScreen from './screens/ProductCreateScreen';
+import BookListScreen from './screens/BookListScreen';
+import BookEditScreen from './screens/BookEditScreen';
+import BookCreateScreen from './screens/BookCreateScreen';
 import { createBrowserHistory } from 'history';
 import OrderListScreen from './screens/OrderListScreen';
 import BookScreen from "./screens/BookScreen";
@@ -41,13 +41,22 @@ function App() {
           {/*<Route path='/product/:id' component={ProductScreen}></Route>*/}
           <Route path='/book/:id' component={BookScreen}></Route>
           <Route path='/cart/:id?' component={CartScreen}></Route>
+
           <Route path='/admin/userlist' component={UserListScreen} />
           <Route path='/admin/user/:id/edit' component={UserEditScreen} />
-          <Route path='/admin/productlist' component={ProductListScreen} exact />
-          <Route path='/admin/productlist/:pageNumber' component={ProductListScreen} exact />
-          <Route path='/admin/product/:id/edit' component={ProductEditScreen} />
-          <Route path='/admin/product/create' component={ProductCreateScreen} />
-          <Route path='/admin/orderlist' component={OrderListScreen} />
+
+          <Route path='/admin/books' component={BookListScreen} exact />
+          <Route path='/admin/book/create' component={BookCreateScreen} />
+          <Route path='/admin/book/:id/edit' component={BookEditScreen} />
+
+          {/*<Route path='/admin/productlist/:pageNumber' component={ProductListScreen} exact />*/}
+
+          <Route path='/admin/authors' component={BookListScreen} exact />
+          <Route path='/admin/authors/create' component={BookCreateScreen} />
+          <Route path='/admin/authors/:id/edit' component={BookEditScreen} />
+
+          {/*<Route path='/admin/orderlist' component={OrderListScreen} />*/}
+
           <Route path='/' component={HomeBookScreen} exact></Route>
         </Container>
       </main>

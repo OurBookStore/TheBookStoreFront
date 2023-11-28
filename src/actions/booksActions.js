@@ -27,23 +27,22 @@ import {
     PRODUCT_IMAGE_SUCCESS,
     PRODUCT_IMAGE_FAIL
 } from '../constants/productConstants';
-import { getErrorMessage } from '../service/CommonUtils';
+import {getErrorMessage} from '../service/CommonUtils';
 import {
     getAllProductsDetailApi,
     getProductDetailApi,
     getProductReviewsApi,
     createProductReviewApi,
-    updateProductDetailApi,
-    createProductApi,
-    deleteProductApi,
-    getImageApi, getBookDetailApi, getAllBooksDetailApi
+    updateBookApi,
+    createBookApi,
+    getImageApi, getBookApi, getAllBooksDetailApi, deleteBookApi
 } from '../service/RestApiCalls';
 import {logout} from "./userActions";
 import {listProductDetailsAction} from "./productActions";
 
 export const listBooksAction = (pageNumber) => async (dispatch) => {
     try {
-        dispatch({ type: PRODUCT_LIST_REQUEST });
+        dispatch({type: PRODUCT_LIST_REQUEST});
         //Get All Products Detail
         const allProductsDetail = await getAllBooksDetailApi();
         dispatch({
@@ -59,13 +58,13 @@ export const listBooksAction = (pageNumber) => async (dispatch) => {
     }
 };
 
-export const listBooksDetailsAction = (productId) => async (dispatch) => {
+export const getBookAction = (bookId) => async (dispatch) => {
     try {
-        dispatch({ type: PRODUCT_DETAILS_REQUEST });
-        //Get Product Detail
+        dispatch({type: PRODUCT_DETAILS_REQUEST});
 
-        console.log("HAHAHHAHA");
-        const productDetail = await getProductDetailApi(productId);
+        //Get Product Detail
+        const productDetail = await getBookApi(bookId);
+        console.log(productDetail)
         dispatch({
             type: PRODUCT_DETAILS_SUCCESS,
             payload: productDetail
@@ -80,7 +79,7 @@ export const listBooksDetailsAction = (productId) => async (dispatch) => {
 
 export const listProductReviewsAction = (productId) => async (dispatch) => {
     try {
-        dispatch({ type: PRODUCT_REVIEWS_REQUEST });
+        dispatch({type: PRODUCT_REVIEWS_REQUEST});
         //Get Product Reviews
         //const productReviews = await getProductReviewsApi(productId);
         const productReviews = 'nothing';
@@ -99,7 +98,7 @@ export const listProductReviewsAction = (productId) => async (dispatch) => {
 
 export const getImageAction = (imageId) => async (dispatch) => {
     try {
-        dispatch({ type: PRODUCT_IMAGE_REQUEST });
+        dispatch({type: PRODUCT_IMAGE_REQUEST});
         //Get Product Reviews
         const base64Image = await getImageApi(imageId);
 
@@ -136,41 +135,18 @@ export const createProductReviewAction = (createProductReviewRequestBody) => asy
     }
 };
 
-export const deleteProductAction = (productId) => async (dispatch, getState) => {
-    try {
-        dispatch({
-            type: PRODUCT_DELETE_REQUEST
-        });
-
-        //Delete Product
-        await deleteProductApi(productId);
-
-        dispatch({
-            type: PRODUCT_DELETE_SUCCESS
-        });
-    } catch (error) {
-        const message = error.response && error.response.data.message ? error.response.data.message : error.message;
-        if (message === 'Not authorized, token failed') {
-            dispatch(logout());
-        }
-        dispatch({
-            type: PRODUCT_DELETE_FAIL,
-            payload: message
-        });
-    }
-};
-
-export const createProductAction = (productReqBody) => async (dispatch) => {
+export const createBookAction = (bookReqBody) => async (dispatch) => {
     try {
         dispatch({
             type: PRODUCT_CREATE_REQUEST
         });
 
         //Create Product
-        await createProductApi(productReqBody);
+        const bookId = await createBookApi(bookReqBody);
 
         dispatch({
-            type: PRODUCT_CREATE_SUCCESS
+            type: PRODUCT_CREATE_SUCCESS,
+            payload: bookId
         });
     } catch (error) {
         const message = error.response && error.response.data.message ? error.response.data.message : error.message;
@@ -184,19 +160,19 @@ export const createProductAction = (productReqBody) => async (dispatch) => {
     }
 };
 
-export const updateProductAction = (productReqBody) => async (dispatch) => {
+export const updateBookAction = (bookReqBody) => async (dispatch) => {
     try {
         dispatch({
             type: PRODUCT_UPDATE_REQUEST
         });
 
         //Update Product
-        await updateProductDetailApi(productReqBody);
+        await updateBookApi(bookReqBody);
 
         dispatch({
             type: PRODUCT_UPDATE_SUCCESS
         });
-        dispatch(listProductDetailsAction(productReqBody.productId));
+        dispatch(listProductDetailsAction(bookReqBody.productId));
     } catch (error) {
         const message = error.response && error.response.data.message ? error.response.data.message : error.message;
         if (message === 'Not authorized, token failed') {
@@ -204,6 +180,30 @@ export const updateProductAction = (productReqBody) => async (dispatch) => {
         }
         dispatch({
             type: PRODUCT_UPDATE_FAIL,
+            payload: message
+        });
+    }
+};
+
+export const deleteBookAction = (bookId) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: PRODUCT_DELETE_REQUEST
+        });
+
+        //Delete Book
+        await deleteBookApi(bookId);
+
+        dispatch({
+            type: PRODUCT_DELETE_SUCCESS
+        });
+    } catch (error) {
+        const message = error.response && error.response.data.message ? error.response.data.message : error.message;
+        if (message === 'Not authorized, token failed') {
+            dispatch(logout());
+        }
+        dispatch({
+            type: PRODUCT_DELETE_FAIL,
             payload: message
         });
     }

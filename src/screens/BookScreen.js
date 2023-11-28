@@ -4,11 +4,11 @@ import { Button, Card, Col, Form, Image, ListGroup, ListGroupItem, Row } from 'r
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import FullPageLoader from '../components/FullPageLoader';
-import { createProductReviewAction, listProductDetailsAction, listProductReviewsAction, getImageAction } from '../actions/productActions';
+import { createProductReviewAction, listProductReviewsAction } from '../actions/productActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Rating from '../components/Rating';
-import {getBookDetailApi, getImageApi, getProductDetailApi} from '../service/RestApiCalls';
+import {getBookApi, getImageApi, getProductDetailApi} from '../service/RestApiCalls';
 
 const BookScreen = (props) => {
   const [qty, setQty] = useState(1);
@@ -34,7 +34,7 @@ const BookScreen = (props) => {
     // setProductimageBase64(null);
     // dispatch(listProductDetailsAction(props.match.params.id));
     console.log("In Book api")
-    await getBookDetailApi(props.match.params.id).then((r) => {
+    await getBookApi(props.match.params.id).then((r) => {
       setProduct(r);
     });
     dispatch(listProductReviewsAction(props.match.params.id));

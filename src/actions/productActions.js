@@ -33,30 +33,11 @@ import {
   getProductDetailApi,
   getProductReviewsApi,
   createProductReviewApi,
-  updateProductDetailApi,
-  createProductApi,
-  deleteProductApi,
-  getImageApi
+  updateBookApi,
+  createBookApi,
+  getImageApi, getAllBooksDetailApi, deleteBookApi
 } from '../service/RestApiCalls';
 import {logout} from "./userActions";
-
-export const listProductsAction = (pageNumber) => async (dispatch) => {
-  try {
-    dispatch({ type: PRODUCT_LIST_REQUEST });
-    //Get All Products Detail
-    const allProductsDetail = await getAllProductsDetailApi(pageNumber || 0);
-    dispatch({
-      type: PRODUCT_LIST_SUCCESS,
-      payload: allProductsDetail.page.content,
-      pageResponse: allProductsDetail.page
-    });
-  } catch (error) {
-    dispatch({
-      type: PRODUCT_LIST_FAIL,
-      payload: getErrorMessage(error)
-    });
-  }
-};
 
 export const listProductDetailsAction = (productId) => async (dispatch) => {
   try {
@@ -134,53 +115,6 @@ export const createProductReviewAction = (createProductReviewRequestBody) => asy
   }
 };
 
-export const deleteProductAction = (productId) => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: PRODUCT_DELETE_REQUEST
-    });
-
-    //Delete Product
-    await deleteProductApi(productId);
-
-    dispatch({
-      type: PRODUCT_DELETE_SUCCESS
-    });
-  } catch (error) {
-    const message = error.response && error.response.data.message ? error.response.data.message : error.message;
-    if (message === 'Not authorized, token failed') {
-      dispatch(logout());
-    }
-    dispatch({
-      type: PRODUCT_DELETE_FAIL,
-      payload: message
-    });
-  }
-};
-
-export const createProductAction = (productReqBody) => async (dispatch) => {
-  try {
-    dispatch({
-      type: PRODUCT_CREATE_REQUEST
-    });
-
-    await createProductApi(productReqBody);
-
-    dispatch({
-      type: PRODUCT_CREATE_SUCCESS
-    });
-  } catch (error) {
-    const message = error.response && error.response.data.message ? error.response.data.message : error.message;
-    if (message === 'Not authorized, token failed') {
-      dispatch(logout());
-    }
-    dispatch({
-      type: PRODUCT_CREATE_FAIL,
-      payload: message
-    });
-  }
-};
-
 export const updateProductAction = (productReqBody) => async (dispatch) => {
   try {
     dispatch({
@@ -188,7 +122,7 @@ export const updateProductAction = (productReqBody) => async (dispatch) => {
     });
 
     //Update Product
-    await updateProductDetailApi(productReqBody);
+    await updateBookApi(productReqBody);
 
     dispatch({
       type: PRODUCT_UPDATE_SUCCESS
