@@ -140,13 +140,7 @@ export const getUserDetails = (userId) => async (dispatch) => {
       type: USER_DETAILS_REQUEST
     });
 
-    let userInfoResponse;
-    if (userId) {
-      userInfoResponse = await getUserApi(userId);
-    } else {
-      //Get UserInfo
-      userInfoResponse = await getUserInfoApi();
-    }
+    let userInfoResponse = await getUserApi(userId);
 
     dispatch({
       type: USER_DETAILS_SUCCESS,
@@ -198,6 +192,7 @@ export const listUsersAction = () => async (dispatch) => {
 
     //list  users
     const listUsersResponse = await getAllUsersApi();
+    console.log("listUsersResponse ", listUsersResponse)
 
     dispatch({
       type: USER_LIST_SUCCESS,
@@ -236,7 +231,7 @@ export const updateUserAction = (userId, userUpdateRequestBody) => async (dispat
     });
 
     //Update User
-    await updateUserApi(userId, userUpdateRequestBody);
+    await updateUserApi(userUpdateRequestBody);
 
     dispatch({ type: USER_UPDATE_SUCCESS });
     dispatch(getUserDetails(userId));

@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { removeFromCartAction } from '../actions/cartActions.js';
-import {getBookDetailApi, getProductDetailApi} from '../service/RestApiCalls.js';
+import {getBookApi, getProductDetailApi} from '../service/RestApiCalls.js';
 import FullPageLoader from './FullPageLoader.js';
 import Message from '../components/Message';
 import { useState } from 'react';
@@ -21,7 +21,7 @@ const CartItem = ({ item, addToCart ,props}) => {
   useEffect(async () => {
     try {
       console.log("Get data", item);
-      const productDetail = await getBookDetailApi(item.book.id);
+      const productDetail = await getBookApi(item.book.id);
       setProduct(productDetail);
       setLoading(false);
 
