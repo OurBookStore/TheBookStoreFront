@@ -34,7 +34,7 @@ const CartScreen = (props) => {
       props.history.push(`/login?redirect=${redirect}`);
       return;
     }
-    if (productId && !isAdded) {
+    if (productId) {
       addToCart();
     } else {
       getCartDetail();
