@@ -10,7 +10,7 @@ import Message from '../components/Message';
 import { useState } from 'react';
 import { getErrorMessage } from '../service/CommonUtils';
 
-const CartItem = ({ item, addToCart ,props}) => {
+const CartItem = ({ item, updateItemCart ,props}) => {
   const [product, setProduct] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -55,7 +55,7 @@ const CartItem = ({ item, addToCart ,props}) => {
             <Col md={2} className='pt-3'>
               {product && (
                 <>
-                  <Form.Control as='select' value={item.count} onChange={(e) => addToCart(item.book.id, e.target.value)}>
+                  <Form.Control as='select' value={item.count} onChange={(e) => updateItemCart(item.id, e.target.value)}>
                     {item.book.count > 11
                       ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => (
                           <option key={x + 1} value={x + 1}>

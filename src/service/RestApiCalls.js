@@ -288,7 +288,6 @@ export const addToCartApi = async (addToCartRequestBody) => {
 
 export const addPositionApi = async (addPositionBody) => {
     const axiosConfig = getAxiosConfig();
-    console.log("here on position");
     const responseData = axios
         .post(`${BACKEND_API_GATEWAY_URL}/positions`, addPositionBody, axiosConfig)
         .then((response) => {
@@ -297,6 +296,15 @@ export const addPositionApi = async (addPositionBody) => {
     return responseData;
 };
 
+export const updatePositionApi = async (addPositionBody) => {
+    const axiosConfig = getAxiosConfig();
+    const responseData = axios
+      .put(`${BACKEND_API_GATEWAY_URL}/positions`, addPositionBody, axiosConfig)
+      .then((response) => {
+          return response.data;
+      });
+    return responseData;
+};
 
 export const getCartDetailsApi = async (cartId) => {
     const axiosConfig = getAxiosConfig();
