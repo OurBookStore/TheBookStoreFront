@@ -28,7 +28,7 @@ import {
   orderDetailsReducer,
   orderListAllReducer
 } from './reducers/orderReducers';
-import { cartAddReducer, cartDetailReducer, cartRemoveReducer,cartReducer } from './reducers/cartReducers';
+import { cartAddReducer, cartDetailReducer, cartRemoveReducer,cartReducer,cartUpdateItemReducer } from './reducers/cartReducers';
 import { addressDeleteReducer, addressListMyReducer, addressSaveReducer } from './reducers/addressReducer';
 import { paymentMethodListMyReducer, paymentMethodSaveReducer } from './reducers/paymentReducers';
 
@@ -43,6 +43,7 @@ const appReducer = combineReducers({
   productImage: productImageReducer,
   cart: cartDetailReducer,
   cartAdd: cartAddReducer,
+  cartUpdateItem: cartUpdateItemReducer,
   cartRemove: cartRemoveReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,

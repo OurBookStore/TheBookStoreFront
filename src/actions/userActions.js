@@ -52,7 +52,8 @@ export const login = (usernameOrEmail, password) => async (dispatch) => {
     const loginResponse = await postLoginApi(loginRequest);
 
     const userInfo = {
-      token: loginResponse.access_token
+      token: loginResponse.access_token,
+      refresh_token: loginResponse.refresh_token
     };
     localStorage.setItem('userInfo', JSON.stringify(userInfo));
 
@@ -114,6 +115,7 @@ export const register = (userName, email, password) => async (dispatch) => {
     //Get UserInfo
     const userInfoResponse = await getUserInfoApi();
     userInfoResponse.token = loginResponse.access_token;
+    userInfoResponse.refresh_token = loginResponse.refresh_token;
 
     dispatch({
       type: USER_REGISTER_SUCCESS,
@@ -181,6 +183,7 @@ export const updateUserProfile = (user) => async (dispatch) => {
       payload: updatedUserInfo
     });
 
+    debugger;
     localStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
   } catch (error) {
     dispatch({

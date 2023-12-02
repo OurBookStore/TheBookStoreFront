@@ -13,7 +13,11 @@ import {
     CART_REMOVE_ITEM_RESET,
     CART_REMOVE_ITEM_SUCCESS,
     CART_SAVE_PAYMENT_METHOD,
-    CART_SAVE_SHIPPING_ADDRESS
+    CART_SAVE_SHIPPING_ADDRESS,
+    POSITION_UPDATE_ITEM_FAIL,
+    POSITION_UPDATE_ITEM_REQUEST,
+    POSITION_UPDATE_ITEM_RESET,
+    POSITION_UPDATE_ITEM_SUCCESS
 } from '../constants/cartConstants';
 
 export const cartReducer = (state, action) => {
@@ -74,15 +78,9 @@ export const cartReducer = (state, action) => {
 export const cartDetailReducer = (state = {cart: {}}, action) => {
     switch (action.type) {
         case CART_DETAILS_REQUEST:{
-            console.log(" (Det)Reqest Reducer",action.payload);
-            console.log(" (Det)Reqest Reducer",action.state);
-            console.log(" (Det)Reqest Reducer",state);
             return {...state, loading: true};
         }
         case CART_DETAILS_SUCCESS:
-            console.log("(Det)Cuccess Reducer",action.payload);
-            console.log("(Det)Cuccess Reducer",action.state);
-            console.log("(Det)Cuccess Reducer",state);
             return {loading: false, cart: action.payload};
         case CART_DETAILS_FAIL:
             return {loading: false, error: action.payload};
@@ -96,16 +94,27 @@ export const cartDetailReducer = (state = {cart: {}}, action) => {
 export const cartAddReducer = (state = {}, action) => {
     switch (action.type) {
         case CART_ADD_ITEM_REQUEST:
-            console.log(" (Add)Reqest Reducer",action.payload);
-            console.log(" (Add)Reqest Reducer",state);
             return {loading: true};
         case CART_ADD_ITEM_SUCCESS:
-            console.log("(Add)Cuccess Reducer",action.payload);
-            console.log("(Add)Cuccess Reducer",state);
             return {loading: false, success: true};
         case CART_ADD_ITEM_FAIL:
             return {loading: false, error: action.payload};
         case CART_ADD_ITEM_RESET:
+            return {};
+        default:
+            return state;
+    }
+};
+
+export const cartUpdateItemReducer = (state = {}, action) => {
+    switch (action.type) {
+        case POSITION_UPDATE_ITEM_REQUEST:
+            return {loading: true};
+        case POSITION_UPDATE_ITEM_SUCCESS:
+            return {loading: false, success: true};
+        case POSITION_UPDATE_ITEM_FAIL:
+            return {loading: false, error: action.payload};
+        case POSITION_UPDATE_ITEM_RESET:
             return {};
         default:
             return state;

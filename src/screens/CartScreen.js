@@ -1,12 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap';
 import Message from '../components/Message';
 import CartItem from '../components/CartItem';
-import {addPosition, addToCartAction, getCartDetailsAction} from '../actions/cartActions';
+import {
+  addPosition,
+  addPositionAction,
+  addToCartAction,
+  getCartDetailsAction,
+  updatePositionAction
+} from '../actions/cartActions';
 import FullPageLoader from '../components/FullPageLoader';
 import { LinkContainer } from 'react-router-bootstrap';
+import { push } from 'react-router-redux';
+import { put } from 'axios';
 
 const CartScreen = (props) => {
   const productId = props.match.params.id;
@@ -14,6 +22,7 @@ const CartScreen = (props) => {
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
   const cartState = useSelector((state) => state.cart);
+  const [reloadItem,updateItemReload] = useState(false);
   const { cart } = cartState;
   let loading = cartState.loading;
   let error = cartState.error;
@@ -21,14 +30,11 @@ const CartScreen = (props) => {
   const redirect = props.location.pathname + props.location.search;
 
   useEffect(() => {
-    console.log("Seek proops", props);
     if (userInfo === null || userInfo === undefined) {
       props.history.push(`/login?redirect=${redirect}`);
       return;
     }
-    console.log("Check productId before dead", productId);
-    console.log("info error", error);
-    if (productId) {
+    if (productId && !isAdded) {
       addToCart();
     } else {
       getCartDetail();
@@ -37,16 +43,11 @@ const CartScreen = (props) => {
   }, [dispatch, productId, qty, userInfo]);
 
   const addToCart = (pId, q) => {
-    console.log(`Info of count ${q}`);
-    console.log(`Info of id ${pId}`);
-    console.log(`Info of id 2 ${productId}`);
-    console.log(`Info of count 2 ${qty}`);
-
     const addPositionRequestBody = {
       bookId: pId === undefined ? productId: pId,
       count: q === undefined ? qty : q
     };
-    const promisePositionId = dispatch(addPosition(addPositionRequestBody));
+    const promisePositionId = dispatch(addPositionAction(addPositionRequestBody));
     promisePositionId.then(function (positionId){
       const addToCartPositionRequestBody = {
         orderPositionId: positionId,
@@ -56,19 +57,25 @@ const CartScreen = (props) => {
     }, function (error){
           console.log("info err", error);
     });
-    console.log("State", cartState);
-    console.log("Info cart",cart);
-    console.log("info error", error);
   };
 
+  const updateItemCart = (posId, q) => {
+    const updatePositionBody = {
+      id: posId,
+      count: q
+    };
+    dispatch(updatePositionAction(updatePositionBody));
+    updateItemReload(true);
+    window.location.reload();
+    console.log("end updateing")
+  };
+
+
   const getCartDetail = () => {
-    console.log("info error", error);
-    console.log("Check cart", cart);
     dispatch(getCartDetailsAction(userLogin.userInfo.cartId));
   };
 
   const checkoutHandler = () => {
-    console.log("info error", error);
     props.history.push('/login?redirect=shipping');
   };
 
@@ -90,7 +97,7 @@ const CartScreen = (props) => {
               ) : (
                 <ListGroup.Item variant='flush'>
                   {cart?.cartItems?.map((item) => (
-                    <CartItem key={item.id} item={item} addToCart={addToCart} props={props} ></CartItem>
+                    <CartItem key={item.id} item={item} updateItemCart={updateItemCart} props={props}></CartItem>
                   ))}
                 </ListGroup.Item>
               )}
