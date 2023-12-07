@@ -105,6 +105,7 @@ export const previewOrderAction = (previewOrderRequestBody) => async (dispatch) 
     });
   } catch (error) {
     dispatch({
+
       type: ORDER_PREVIEW_FAIL,
       payload: getErrorMessage(error)
     });

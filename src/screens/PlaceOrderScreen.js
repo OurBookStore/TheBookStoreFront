@@ -23,13 +23,16 @@ const PlaceOrderScreen = (props) => {
 
   if (!order.shippingAddressId) {
     props.history.push('/shipping');
-  } else if (!order.billingAddressId) {
-    props.history.push('/shipping');
-  } else if (!order.paymentMethodId) {
+  }
+  // else if (!order.billingAddressId) {
+  //   props.history.push('/shipping');
+  // }
+  else if (!order.paymentMethodId) {
     props.history.push('/payment');
   }
 
   useEffect(() => {
+    debugger;
     previewOrder();
     // eslint-disable-next-line
     if (createOrderResponse?.orderId != null) {
@@ -71,16 +74,18 @@ const PlaceOrderScreen = (props) => {
                 <h2>Shipping</h2>
                 <p>
                   <strong>Address:</strong>
-                  {previewOrderResponse.shippingAddress.addressLine1}, {previewOrderResponse.shippingAddress.city}
-                  {previewOrderResponse.shippingAddress.postalCode}, {previewOrderResponse.shippingAddress.country}
+                  {previewOrderResponse.shippingAddress.addressLine1}
+                  {/*{previewOrderResponse.shippingAddress.city},*/}
+                  {/*{previewOrderResponse.shippingAddress.postalCode}, */}
+                  {/*{previewOrderResponse.shippingAddress.country}*/}
                 </p>
               </ListGroup.Item>
 
-              <ListGroup.Item>
-                <h2>Payment Method</h2>
-                <strong>Method: </strong>
-                {previewOrderResponse.card.cardBrand.toUpperCase()} - **** **** **** {previewOrderResponse.card.last4Digits}
-              </ListGroup.Item>
+              {/*<ListGroup.Item>*/}
+              {/*  <h2>Payment Method</h2>*/}
+              {/*  <strong>Method: </strong>*/}
+              {/*  {previewOrderResponse.card.cardBrand.toUpperCase()} - **** **** **** {previewOrderResponse.card.last4Digits}*/}
+              {/*</ListGroup.Item>*/}
 
               <ListGroup.Item>
                 <h2>Order Items</h2>

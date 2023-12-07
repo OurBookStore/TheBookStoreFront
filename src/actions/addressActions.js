@@ -40,7 +40,7 @@ export const getMyAddresesAction = () => async (dispatch) => {
     dispatch({
       type: ADDRESS_LIST_MY_REQUEST
     });
-
+    // debugger;
     //Get All my addresses
     const myAddressData = await getAllAddressesApi();
 
@@ -56,14 +56,14 @@ export const getMyAddresesAction = () => async (dispatch) => {
   }
 };
 
-export const deleteAddressAction = (addressId) => async (dispatch) => {
+export const deleteAddressAction = (addressName) => async (dispatch) => {
   try {
     dispatch({
       type: ADDRESS_DELETE_REQUEST
     });
 
     //save address
-    await deleteAddressApi(addressId);
+    await deleteAddressApi(addressName);
 
     dispatch({
       type: ADDRESS_DELETE_SUCCESS

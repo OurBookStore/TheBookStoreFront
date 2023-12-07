@@ -68,7 +68,7 @@ const appReducer = combineReducers({
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
 const billingAddressId = localStorage.getItem('billingAddressId') ? localStorage.getItem('billingAddressId') : null;
 const shippingAddressId = localStorage.getItem('shippingAddressId') ? localStorage.getItem('shippingAddressId') : null;
-const paymentMethodId = localStorage.getItem('paymentMethodId') ? localStorage.getItem('paymentMethodId') : null;
+const paymentMethodId = localStorage.getItem('paymentMethodId') ? localStorage.getItem('paymentMethodId') : 'default';
 
 const initialState = {
   userLogin: { userInfo: userInfoFromStorage },
@@ -82,6 +82,7 @@ const initialState = {
 const rootReducer = (state, action) => {
   if (action.type === 'USER_LOGOUT') {
     console.log('Logout Root Reducer');
+    localStorage.clear();
     state = undefined;
   }
   return appReducer(state, action);
