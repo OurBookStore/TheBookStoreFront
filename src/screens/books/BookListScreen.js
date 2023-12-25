@@ -52,7 +52,6 @@ const BookListScreen = ({history, match}) => {
         dispatch(listBooksAction(selected));
     };
 
-    console.log("---------> 5")
     return (
         <>
             <Row className='align-items-center'>

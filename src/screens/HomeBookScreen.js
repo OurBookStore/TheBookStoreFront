@@ -1,9 +1,9 @@
 import Paginate from '../components/Paginate';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import Product from '../components/Product';
 import Message from '../components/Message';
-import { Col, Row } from 'react-bootstrap';
+import {Col, Row} from 'react-bootstrap';
 
 import FullPageLoader from '../components/FullPageLoader';
 import ReactPaginate from 'react-paginate';
@@ -13,7 +13,7 @@ import {listBooksAction} from "../actions/booksActions";
 const HomeBookScreen = () => {
     const dispatch = useDispatch();
     const productList = useSelector((state) => state.productList);
-    const { loading, error, products, pageResponse } = productList;
+    const {loading, error, products, pageResponse} = productList;
 
     useEffect(() => {
         dispatch(listBooksAction());
@@ -34,10 +34,10 @@ const HomeBookScreen = () => {
                     <Row>
                         {
                             products.map((product) => (
-                            <Col key={product.id} sm={12} md={6} lg={4} xl={3}>
-                                <Product key={product.id} product={product}></Product>
-                            </Col>
-                            )
+                                    <Col key={product.id} sm={12} md={6} lg={4} xl={3}>
+                                        <Product key={product.id} product={product}></Product>
+                                    </Col>
+                                )
                             )
                         }
                     </Row>
