@@ -1,31 +1,51 @@
 import React, {useEffect, useState} from 'react';
-import {BACKEND_API_GATEWAY_URL} from '../constants/appConstants';
+import {BACKEND_API_GATEWAY_URL} from '../../constants/appConstants';
 import {Button, Col, Form, Row} from 'react-bootstrap';
 import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
-import Loader from '../components/Loader';
-import Message from '../components/Message';
-import {addImageToBook, createBookApi, uploadImageApi} from '../service/RestApiCalls';
-import {createBookAction} from "../actions/booksActions";
+import Loader from '../../components/Loader';
+import Message from '../../components/Message';
+import {PRODUCT_UPDATE_RESET} from '../../constants/productConstants';
+import {addImageToBook, getBookApi, uploadImageApi} from '../../service/RestApiCalls';
+import {getBookAction, updateBookAction} from "../../actions/booksActions";
 
-const BookCreateScreen = ({match, history}) => {
+const BookEditScreen = ({match, history}) => {
+    const bookId = match.params.id;
+
     const [name, setName] = useState('');
     const [price, setPrice] = useState(0);
-    const [count, setCount] = useState(0);
     const [imageId, setImageId] = useState('');
+    const [count, setCount] = useState(0);
     const [uploading, setUploading] = useState(false);
 
     const dispatch = useDispatch();
 
-    const bookCreate = useSelector((state) => state.productCreate);
-    const {loading, error, success, product: bookId} = bookCreate;
+    let bookDetails = useSelector((state) => state.productDetails);
+    let {loading, error, product} = bookDetails;
 
-    useEffect(async () => {
-    }, [dispatch, history]);
+    // let file = match.target.files[0];
+
+    const productUpdate = useSelector((state) => state.productUpdate);
+    const {loading: loadingUpdate, error: errorUpdate, success: successUpdate} = productUpdate;
+
+    useEffect(() => {
+        if (successUpdate) {
+            dispatch({type: PRODUCT_UPDATE_RESET});
+            history.push('/admin/books');
+        } else {
+            if (!product?.name) {
+                dispatch(getBookAction(bookId));
+            } else {
+                setName(product.name);
+                setPrice(product.price);
+                setCount(product.count);
+                setImageId(product.image);
+            }
+        }
+    }, [dispatch, history, bookId, product, successUpdate]);
 
     const uploadFileHandler = async (e) => {
         const file = e.target.files[0];
-
         const formData = new FormData();
         formData.append('image', file);
         setUploading(true);
@@ -40,29 +60,25 @@ const BookCreateScreen = ({match, history}) => {
             const imageId = await uploadImageApi(config, formData);
             setImageId(imageId);
             setUploading(false);
+
+            if (imageId) {
+                await addImageToBook(imageId, bookId);
+            }
         } catch (error) {
             console.error(error);
             setUploading(false);
         }
     };
 
-    const submitHandler = async () => {
-        // await dispatch(
-        //     createBookAction({
-        //         name,
-        //         price,
-        //         count
-        //     })
-        // )
-        const bookId = await createBookApi({
-            name,
-            price,
-            count
-        });
-        if (imageId) {
-            await addImageToBook(imageId, bookId);
-        }
-        history.push('/admin/books');
+    const submitHandler = (e) => {
+        dispatch(
+            updateBookAction({
+                id: bookId,
+                name,
+                price,
+                count
+            })
+        );
     };
 
     return (
@@ -70,9 +86,10 @@ const BookCreateScreen = ({match, history}) => {
             <Link to='/admin/books' className='btn btn-dark my-3'>
                 Go Back
             </Link>
-
-            <h1>Create Book</h1>
+            <h1>Edit Book</h1>
             <hr></hr>
+            {loadingUpdate && <Loader/>}
+            {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
             {loading ? (
                 <Loader/>
             ) : error ? (
@@ -92,7 +109,7 @@ const BookCreateScreen = ({match, history}) => {
                                     ></img>
                                     {uploading && <Loader/>}
                                 </Form.Group>
-                                <Form.File className='mt-5 mr-4' id='image-file' label='Choose File' custom
+                                <Form.File className='mr-4' id='image-file' label='Choose File' custom
                                            onChange={uploadFileHandler}></Form.File>
                             </Row>
                         </Col>
@@ -128,9 +145,9 @@ const BookCreateScreen = ({match, history}) => {
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row className='m-5 justify-content-md-center' onClick={submitHandler}>
-                        <Button type='submit' variant='primary'>
-                            Create Book
+                    <Row className='m-5 justify-content-md-center'>
+                        <Button type='submit' variant='primary' onClick={submitHandler}>
+                            Update
                         </Button>
                     </Row>
                 </>
@@ -139,4 +156,4 @@ const BookCreateScreen = ({match, history}) => {
     );
 };
 
-export default BookCreateScreen;
+export default BookEditScreen;
