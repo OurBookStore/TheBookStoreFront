@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { BACKEND_API_GATEWAY_URL } from '../constants/appConstants';
+import { BACKEND_API_GATEWAY_URL } from '../../constants/appConstants';
 import { Button, Card, Col, Form, Image, ListGroup, ListGroupItem, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import FullPageLoader from '../components/FullPageLoader';
-import { createProductReviewAction, listProductReviewsAction } from '../actions/productActions';
-import Loader from '../components/Loader';
-import Message from '../components/Message';
-import Rating from '../components/Rating';
-import {getBookApi, getImageApi, getProductDetailApi} from '../service/RestApiCalls';
+import FullPageLoader from '../../components/FullPageLoader';
+import { createProductReviewAction, listProductReviewsAction } from '../../actions/productActions';
+import Loader from '../../components/Loader';
+import Message from '../../components/Message';
+import Rating from '../../components/Rating';
+import {getBookApi, getImageApi, getProductDetailApi} from '../../service/RestApiCalls';
 
 const BookScreen = (props) => {
   const [qty, setQty] = useState(1);

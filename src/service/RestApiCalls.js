@@ -168,6 +168,14 @@ export const getProductDetailApi = async (productId) => {
     return responseData;
 };
 
+export const getCountries = async () => {
+    const responseData = await axios.get(`${BACKEND_API_GATEWAY_URL}/countries`).then((response) => {
+        return response.data;
+    });
+    return responseData;
+};
+
+
 export const getBookApi = async (bookId) => {
     const responseData = axios.get(`${BACKEND_API_GATEWAY_URL}/books/${bookId}`).then((response) => {
         return response.data;
@@ -194,6 +202,45 @@ export const deleteBookApi = async (bookId) => {
 export const updateBookApi = async (bookReqBody) => {
     const axiosConfig = getAxiosConfig();
     const responseData = await axios.put(`${BACKEND_API_GATEWAY_URL}/books`, bookReqBody, axiosConfig).then((response) => {
+        return response.data;
+    });
+    return responseData;
+};
+
+export const getAuthorApi = async (id) => {
+    const responseData = axios.get(`${BACKEND_API_GATEWAY_URL}/authors/${id}`).then((response) => {
+        return response.data;
+    });
+    return responseData;
+};
+
+export const getAllAuthorsApi = async (pageNumber) => {
+    const responseData = await axios.get(`${BACKEND_API_GATEWAY_URL}/authors`).then((response) => {
+        return response.data;
+    });
+    console.log(responseData);
+    return responseData;
+};
+
+export const createAuthorApi = async (request) => {
+    const axiosConfig = getAxiosConfig();
+    const responseData = await axios.post(`${BACKEND_API_GATEWAY_URL}/authors`, request, axiosConfig).then((response) => {
+        return response.data;
+    });
+    return responseData;
+};
+
+export const updateAuthorApi = async (request) => {
+    const axiosConfig = getAxiosConfig();
+    const responseData = await axios.put(`${BACKEND_API_GATEWAY_URL}/authors`, request, axiosConfig).then((response) => {
+        return response.data;
+    });
+    return responseData;
+};
+
+export const deleteAuthorApi = async (id) => {
+    const axiosConfig = getAxiosConfig();
+    const responseData = await axios.delete(`${BACKEND_API_GATEWAY_URL}/authors/${id}`, axiosConfig).then((response) => {
         return response.data;
     });
     return responseData;
