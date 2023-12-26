@@ -15,13 +15,16 @@ import ShippingScreen from './screens/ShippingScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
-import BookListScreen from './screens/BookListScreen';
-import BookEditScreen from './screens/BookEditScreen';
-import BookCreateScreen from './screens/BookCreateScreen';
+import BookListScreen from './screens/books/BookListScreen';
+import BookEditScreen from './screens/books/BookEditScreen';
+import BookCreateScreen from './screens/books/BookCreateScreen';
 import { createBrowserHistory } from 'history';
 import OrderListScreen from './screens/OrderListScreen';
-import BookScreen from "./screens/BookScreen";
+import BookScreen from "./screens/books/BookScreen";
 import HomeBookScreen from "./screens/HomeBookScreen";
+import AuthorsListScreen from "./screens/authors/AuthorsListScreen";
+import AuthorsCreateScreen from "./screens/authors/AuthorsCreateScreen";
+import AuthorsEditScreen from "./screens/authors/AuthorsEditScreen";
 
 export const history = createBrowserHistory();
 
@@ -51,9 +54,9 @@ function App() {
 
           {/*<Route path='/admin/productlist/:pageNumber' component={ProductListScreen} exact />*/}
 
-          <Route path='/admin/authors' component={BookListScreen} exact />
-          <Route path='/admin/authors/create' component={BookCreateScreen} />
-          <Route path='/admin/authors/:id/edit' component={BookEditScreen} />
+          <Route path='/admin/authors' component={AuthorsListScreen} exact />
+          <Route path='/admin/author/create' component={AuthorsCreateScreen} />
+          <Route path='/admin/author/:id/edit' component={AuthorsEditScreen} />
 
           {/*<Route path='/admin/orderlist' component={OrderListScreen} />*/}
 

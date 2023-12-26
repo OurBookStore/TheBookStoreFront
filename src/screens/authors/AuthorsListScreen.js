@@ -2,66 +2,60 @@ import React, {useEffect} from 'react';
 import {LinkContainer} from 'react-router-bootstrap';
 import {Table, Button, Row, Col} from 'react-bootstrap';
 import {useDispatch, useSelector} from 'react-redux';
-import {isAdmin} from '../service/CommonUtils';
-import Message from '../components/Message';
-import Loader from '../components/Loader';
-import {listBooksAction, deleteBookAction} from '../actions/booksActions';
-import {PRODUCT_CREATE_RESET} from '../constants/productConstants';
-import ReactPaginate from 'react-paginate';
-import {BACKEND_API_GATEWAY_URL} from "../constants/appConstants";
+import {isAdmin} from '../../service/CommonUtils';
+import Message from '../../components/Message';
+import Loader from '../../components/Loader';
+import {PRODUCT_CREATE_RESET} from '../../constants/productConstants';
+import {deleteAuthorAction, getAllAuthorAction} from "../../actions/authorsActions";
 
-const BookListScreen = ({history, match}) => {
+const AuthorsListScreen = ({history, match}) => {
     console.log("---------> 1")
     const dispatch = useDispatch();
 
-    const bookList = useSelector((state) => state.productList);
-    const {loading, error, products: books, pageResponse} = bookList;
+    const authorList = useSelector((state) => state.productList);
+    const {loading, error, products: authors, pageResponse} = authorList;
 
-    const bookDelete = useSelector((state) => state.productDelete);
-    const {loading: loadingDelete, error: errorDelete, success: successDelete} = bookDelete;
+    const authorDelete = useSelector((state) => state.productDelete);
+    const {loading: loadingDelete, error: errorDelete, success: successDelete} = authorDelete;
 
-    const bookCreate = useSelector((state) => state.productCreate);
-    const {loading: loadingCreate, error: errorCreate, success: successCreate, product: createdProduct} = bookCreate;
+    const authorCreate = useSelector((state) => state.productCreate);
+    const {loading: loadingCreate, error: errorCreate, success: successCreate, product: createdProduct} = authorCreate;
 
     const userLogin = useSelector((state) => state.userLogin);
     const {userInfo} = userLogin;
-    console.log("---------> 2")
     useEffect(async () => {
-        console.log("---------> 3")
         dispatch({type: PRODUCT_CREATE_RESET});
 
         if (!userInfo || !isAdmin()) {
             history.push('/login');
         }
-        console.log("---------> 4")
-        await dispatch(listBooksAction(0));
+        await dispatch(getAllAuthorAction(0));
     }, [dispatch, history, userInfo, successDelete, successCreate, createdProduct]);
 
     const deleteHandler = (id) => {
         if (window.confirm('Are you sure')) {
-            dispatch(deleteBookAction(id));
+            dispatch(deleteAuthorAction(id));
         }
     };
 
     const createHandler = () => {
-        history.push('/admin/book/create');
+        history.push('/admin/author/create');
     };
 
     const handlePageClick = (data) => {
         let selected = data.selected;
-        dispatch(listBooksAction(selected));
+        dispatch(getAllAuthorAction(selected));
     };
 
-    console.log("---------> 5")
     return (
         <>
             <Row className='align-items-center'>
                 <Col>
-                    <h1>Books</h1>
+                    <h1>Authors</h1>
                 </Col>
                 <Col className='text-right'>
                     <Button className='my-3' onClick={createHandler}>
-                        <i className='fas fa-plus'></i> Create Book
+                        <i className='fas fa-plus'></i> Create Author
                     </Button>
                 </Col>
             </Row>
@@ -80,38 +74,26 @@ const BookListScreen = ({history, match}) => {
                         <tr>
                             <th>ID</th>
                             <th>NAME</th>
-                            <th>PRICE</th>
-                            <th>COUNT</th>
-                            <th>IMAGE ID</th>
-                            <th>IMAGE</th>
+                            <th>DATE OF BIRTH</th>
+                            <th>COUNTRY</th>
                             <th></th>
                         </tr>
                         </thead>
                         <tbody>
-                        {books?.sort((a, b) => a.id - b.id).map((book) => (
-                            <tr key={book.id}>
-                                <td>{book.id}</td>
-                                <td>{book.name}</td>
-                                <td>${book.price}</td>
-                                <td>{book.count}</td>
-                                <td>{book.image}</td>
+                        {authors?.sort((a, b) => a.id - b.id).map((author) => (
+                            <tr key={author.id}>
+                                <td>{author.id}</td>
+                                <td>{author.fullName}</td>
+                                <td>{author.dateOfBirth}</td>
+                                <td>{author.country}</td>
                                 <td>
-                                    <img
-                                        src={`${BACKEND_API_GATEWAY_URL}/images/${book.image}`}
-                                        alt={book.image}
-                                        style={{width: '50px'}}
-                                        // fluid
-                                        // rounded
-                                    ></img>
-                                </td>
-                                <td>
-                                    <LinkContainer to={`/admin/book/${book.id}/edit`}>
+                                    <LinkContainer to={`/admin/author/${author.id}/edit`}>
                                         <Button variant='light' className='btn-sm'>
                                             <i className='fas fa-edit'></i>
                                         </Button>
                                     </LinkContainer>
                                     <Button variant='danger' className='btn-sm'
-                                            onClick={() => deleteHandler(book.id)}>
+                                            onClick={() => deleteHandler(author.id)}>
                                         <i className='fas fa-trash'></i>
                                     </Button>
                                 </td>
@@ -125,4 +107,4 @@ const BookListScreen = ({history, match}) => {
     );
 };
 
-export default BookListScreen;
+export default AuthorsListScreen;
