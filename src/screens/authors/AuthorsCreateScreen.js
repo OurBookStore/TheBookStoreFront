@@ -6,6 +6,7 @@ import {Link} from 'react-router-dom';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import {addImageToBook, createAuthorApi, createBookApi, getCountries, uploadImageApi} from '../../service/RestApiCalls';
+import {TextField} from "@material-ui/core";
 
 const AuthorsCreateScreen = ({match, history}) => {
     const [fullName, setFullName] = useState('');
@@ -66,12 +67,17 @@ const AuthorsCreateScreen = ({match, history}) => {
 
                             <Form.Group controlId='dateOfBirth'>
                                 <Form.Label>Date of birth</Form.Label>
-                                <Form.Control
-                                    type='dateOfBirth'
-                                    placeholder='Enter date of birth'
-                                    value={dateOfBirth}
-                                    onChange={(e) => setDateOfBirth(e.target.value)}
-                                ></Form.Control>
+                                <div >
+                                    <TextField
+                                        id="date"
+                                        type="date"
+                                        defaultValue="2017-05-24"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        onChange={(e) => setDateOfBirth(e.target.value)}
+                                    />
+                                </div>
                             </Form.Group>
 
                             <Form.Group controlId='country'>

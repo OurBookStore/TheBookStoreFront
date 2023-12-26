@@ -8,6 +8,7 @@ import Message from '../../components/Message';
 import {PRODUCT_UPDATE_RESET} from '../../constants/productConstants';
 import {getBookAction, updateBookAction} from "../../actions/booksActions";
 import {getAuthorAction, updateAuthorAction} from "../../actions/authorsActions";
+import {TextField} from "@material-ui/core";
 
 const AuthorsEditScreen = ({match, history}) => {
     const authorId = match.params.id;
@@ -81,12 +82,17 @@ const AuthorsEditScreen = ({match, history}) => {
 
                             <Form.Group controlId='dateOfBirth'>
                                 <Form.Label>Date of birth</Form.Label>
-                                <Form.Control
-                                    type='dateOfBirth'
-                                    placeholder='Enter date of birth'
-                                    value={dateOfBirth}
-                                    onChange={(e) => setDateOfBirth(e.target.value)}
-                                ></Form.Control>
+                                <div >
+                                    <TextField
+                                        id="date"
+                                        type="date"
+                                        defaultValue="2017-05-24"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        onChange={(e) => setDateOfBirth(e.target.value)}
+                                    />
+                                </div>
                             </Form.Group>
 
                             <Form.Group controlId='country'>
