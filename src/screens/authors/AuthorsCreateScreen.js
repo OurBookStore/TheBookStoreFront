@@ -73,6 +73,7 @@ const AuthorsCreateScreen = ({match, history}) => {
                                     <TextField
                                         id="date"
                                         type="date"
+                                        value={dateOfBirth}
                                         defaultValue="2017-05-24"
                                         InputLabelProps={{
                                             shrink: true,
@@ -84,7 +85,7 @@ const AuthorsCreateScreen = ({match, history}) => {
 
                             <Form.Group controlId='country'>
                                 <Form.Label>Country : </Form.Label>
-                                <select id="select" onChange={(e) => setCountry(e.target.value)}>
+                                <select onChange={(e) => setCountry(e.target.value)}>
                                     {countries.map((country, index) => (
                                         <option value={country}>
                                             {country}
