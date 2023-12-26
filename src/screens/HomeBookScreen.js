@@ -26,7 +26,7 @@ const HomeBookScreen = () => {
 
     return (
         <>
-            <h1>Latest Products</h1>
+            <h1>Books</h1>
             {error ? (
                 <Message variant='danger'></Message>
             ) : (
