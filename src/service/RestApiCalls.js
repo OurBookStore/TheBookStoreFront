@@ -337,6 +337,15 @@ export const getAllBooksDetailApi = async (pageNumber) => {
     return responseData;
 };
 
+export const searchBooksDetailApi = async (searchText, pageNumber) => {
+    console.log("api   ",searchText);
+    const responseData = await axios.get(`${BACKEND_API_GATEWAY_URL}/books/search/${searchText}`).then((response) => {
+        return response.data;
+    });
+    console.log(responseData);
+    return responseData;
+};
+
 export const addToCartApi = async (addToCartRequestBody) => {
     const axiosConfig = getAxiosConfig();
     console.log("here on to cart position");
