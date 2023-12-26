@@ -113,7 +113,7 @@ const AuthorsEditScreen = ({match, history}) => {
                             </Form.Group>
 
                             <Form.Group controlId='country'>
-                                <Form.Label>Country </Form.Label>
+                                <Form.Label>Country : </Form.Label>
                                 <select onChange={(e) => setCountry(e.target.value)}>
                                     {countries.map((country, index) => (
                                         <option value={country}>
