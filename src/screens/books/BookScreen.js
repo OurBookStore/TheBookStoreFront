@@ -90,6 +90,7 @@ const BookScreen = (props) => {
                 </ListGroupItem>
                 <ListGroupItem>Price : ${product.price}</ListGroupItem>
                 <ListGroupItem>Description : {product.description}</ListGroupItem>
+                <ListGroupItem>Authors : {product.authors.map(author=>author.fullName)}</ListGroupItem>
               </ListGroup>
             </Col>
             <Col md={3}>
