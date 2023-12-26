@@ -103,9 +103,7 @@ const BookEditScreen = ({match, history}) => {
                                     <img
                                         src={`${BACKEND_API_GATEWAY_URL}/images/${imageId}`}
                                         alt={imageId}
-                                        style={{width: '350px'}}
-                                        fluid
-                                        rounded
+                                        style={{width: '100%'}}
                                     ></img>
                                     {uploading && <Loader/>}
                                 </Form.Group>
