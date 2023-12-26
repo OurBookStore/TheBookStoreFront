@@ -10,6 +10,7 @@ import {getBookAction, updateBookAction} from "../../actions/booksActions";
 import {getAuthorAction, updateAuthorAction} from "../../actions/authorsActions";
 import {TextField} from "@material-ui/core";
 import {countriesAction} from "../../actions/countriesActions";
+import {addBookToAuthorApi, removeBookToAuthorApi, uploadImageApi} from "../../service/RestApiCalls";
 
 const AuthorsEditScreen = ({match, history}) => {
     const authorId = match.params.id;
@@ -19,6 +20,8 @@ const AuthorsEditScreen = ({match, history}) => {
     const [fullName, setFullName] = useState('');
     const [dateOfBirth, setDateOfBirth] = useState('');
     const [country, setCountry] = useState('');
+    let [books, setBooks] = useState([]);
+    const [bookId, setBookId] = useState('');
 
     const dispatch = useDispatch();
 
@@ -46,6 +49,7 @@ const AuthorsEditScreen = ({match, history}) => {
                 setFullName(product.fullName);
                 setDateOfBirth(product.dateOfBirth);
                 setCountry(product.country);
+                setBooks(product.books.map(book => book.id))
             }
         }
     }, [dispatch, history, authorId, product, successUpdate]);
@@ -59,6 +63,16 @@ const AuthorsEditScreen = ({match, history}) => {
                 dateOfBirth
             })
         );
+    };
+
+    const addBookHandler = async (e) => {
+        await addBookToAuthorApi(authorId, bookId);
+        window.location.reload()
+    };
+
+    const removeBookHandler = async (e) => {
+        await removeBookToAuthorApi(authorId, bookId);
+        window.location.reload()
     };
 
     const handleOpen = () => {
@@ -127,6 +141,38 @@ const AuthorsEditScreen = ({match, history}) => {
                     <Row className='m-5 justify-content-md-center'>
                         <Button type='submit' variant='primary' onClick={submitHandler}>
                             Update
+                        </Button>
+                    </Row>
+
+                    <Form.Group controlId='books'>
+                        <Form.Label>Books</Form.Label>
+                        <Form.Control
+                            type='books'
+                            placeholder='Nothing'
+                            value={books}
+                            readOnly={true}
+                        ></Form.Control>
+                    </Form.Group>
+
+                    <Row>
+                        <Col>
+                            <Form.Group controlId='bookId'>
+                                <Form.Label>Book</Form.Label>
+                                <Form.Control
+                                    type='bookId'
+                                    placeholder='Enter bookId'
+                                    value={bookId}
+                                    onChange={(e) => setBookId(e.target.value)}
+                                ></Form.Control>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row className='m-5 justify-content-md-center'>
+                        <Button type='submit' variant='primary' onClick={addBookHandler}>
+                            Add book
+                        </Button>
+                        <Button type='submit' variant='primary' onClick={removeBookHandler}>
+                            Remove book
                         </Button>
                     </Row>
                 </>
