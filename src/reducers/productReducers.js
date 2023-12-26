@@ -29,7 +29,10 @@ import {
   PRODUCT_IMAGE_REQUEST,
   PRODUCT_IMAGE_SUCCESS,
   PRODUCT_IMAGE_FAIL,
-  PRODUCT_IMAGE_RESET
+  PRODUCT_IMAGE_RESET,
+  COUNTRY_LIST_REQUEST,
+  COUNTRY_LIST_SUCCESS,
+  COUNTRY_LIST_FAIL
 } from '../constants/productConstants';
 
 export const productListReducer = (state = { products: [] }, action) => {
@@ -40,6 +43,19 @@ export const productListReducer = (state = { products: [] }, action) => {
       return { loading: false, products: action.payload, pageResponse: action.pageResponse };
     case PRODUCT_LIST_FAIL:
       return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const countryListReducer = (state = { countries: [] }, action) => {
+  switch (action.type) {
+    case COUNTRY_LIST_REQUEST:
+      return { loading: true, countries: [] };
+    case COUNTRY_LIST_SUCCESS:
+      return { loading: false, countries: action.payload };
+    case COUNTRY_LIST_FAIL:
+      return { loading: false, countries: action.payload };
     default:
       return state;
   }
