@@ -14,7 +14,7 @@ const Product = (props) => {
                     <Card.Img
                         src={`${BACKEND_API_GATEWAY_URL}/images/${product?.image}`}
                         variant='top'
-                        style={{height: '250px'}}
+                        style={{width: '100%'}}
                     ></Card.Img>
                 </Link>
                 <Card.Body>

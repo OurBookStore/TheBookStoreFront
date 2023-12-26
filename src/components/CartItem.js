@@ -44,7 +44,13 @@ const CartItem = ({ item, addToCart ,props}) => {
         <ListGroup.Item key={item.productId}>
           <Row>
             <Col md={2}>
-              <Image src={`${BACKEND_API_GATEWAY_URL}/api/catalog/image/${product?.imageId}`} alt={item.productName} fluid rounded></Image>
+              <Image
+                  src={`${BACKEND_API_GATEWAY_URL}/images/${product?.image}`}
+                  alt={item.productName}
+                  style={{width: '100%'}}
+                  fluid
+                  rounded
+              ></Image>
             </Col>
             <Col md={3} className='pt-4'>
               <Link to={`/book/${item.book.id}`}>{item.book.name}</Link>
