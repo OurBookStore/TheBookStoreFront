@@ -7,6 +7,7 @@ import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import {addImageToBook, createAuthorApi, createBookApi, getCountries, uploadImageApi} from '../../service/RestApiCalls';
 import {TextField} from "@material-ui/core";
+import {countriesAction} from "../../actions/countriesActions";
 
 const AuthorsCreateScreen = ({match, history}) => {
     const [fullName, setFullName] = useState('');
@@ -15,13 +16,14 @@ const AuthorsCreateScreen = ({match, history}) => {
 
     const dispatch = useDispatch();
 
+    const countryList = useSelector((state) => state.countryList);
+    const {loading1, error1, countries: countries} = countryList;
+
     const authorCreate = useSelector((state) => state.productCreate);
     const {loading, error, success, product: id} = authorCreate;
-    let countries = getCountries();
 
     useEffect(async () => {
-        countries = await getCountries();
-        console.log(countries)
+        dispatch(countriesAction())
     }, [dispatch, history]);
 
     const submitHandler = async () => {
@@ -67,7 +69,7 @@ const AuthorsCreateScreen = ({match, history}) => {
 
                             <Form.Group controlId='dateOfBirth'>
                                 <Form.Label>Date of birth</Form.Label>
-                                <div >
+                                <div>
                                     <TextField
                                         id="date"
                                         type="date"
@@ -81,13 +83,14 @@ const AuthorsCreateScreen = ({match, history}) => {
                             </Form.Group>
 
                             <Form.Group controlId='country'>
-                                <Form.Label>Country</Form.Label>
-                                <Form.Control
-                                    type='country'
-                                    placeholder='Enter country'
-                                    value={country}
-                                    onChange={(e) => setCountry(e.target.value)}
-                                ></Form.Control>
+                                <Form.Label>Country : </Form.Label>
+                                <select id="select" onChange={(e) => setCountry(e.target.value)}>
+                                    {countries.map((country, index) => (
+                                        <option value={country}>
+                                            {country}
+                                        </option>
+                                    ))}
+                                </select>
                             </Form.Group>
                         </Col>
                     </Row>

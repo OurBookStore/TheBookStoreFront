@@ -9,15 +9,22 @@ import {PRODUCT_UPDATE_RESET} from '../../constants/productConstants';
 import {getBookAction, updateBookAction} from "../../actions/booksActions";
 import {getAuthorAction, updateAuthorAction} from "../../actions/authorsActions";
 import {TextField} from "@material-ui/core";
+import {countriesAction} from "../../actions/countriesActions";
 
 const AuthorsEditScreen = ({match, history}) => {
     const authorId = match.params.id;
+
+    const [open, setOpen] = React.useState(false);
 
     const [fullName, setFullName] = useState('');
     const [dateOfBirth, setDateOfBirth] = useState('');
     const [country, setCountry] = useState('');
 
     const dispatch = useDispatch();
+
+    const countryList = useSelector((state) => state.countryList);
+    const {loading1, error1, countries: countries} = countryList;
+
 
     let authorDetails = useSelector((state) => state.productDetails);
     let {loading, error, product} = authorDetails;
@@ -28,6 +35,7 @@ const AuthorsEditScreen = ({match, history}) => {
     const {loading: loadingUpdate, error: errorUpdate, success: successUpdate} = productUpdate;
 
     useEffect(() => {
+        dispatch(countriesAction())
         if (successUpdate) {
             dispatch({type: PRODUCT_UPDATE_RESET});
             history.push('/admin/authors');
@@ -52,6 +60,14 @@ const AuthorsEditScreen = ({match, history}) => {
             })
         );
     };
+
+    const handleOpen = () => {
+        setOpen(!open);
+    };
+
+    function handleChange(e) {
+        this.setState({selectValue: e.target.value});
+    }
 
     return (
         <>
@@ -82,11 +98,12 @@ const AuthorsEditScreen = ({match, history}) => {
 
                             <Form.Group controlId='dateOfBirth'>
                                 <Form.Label>Date of birth</Form.Label>
-                                <div >
+                                <div>
                                     <TextField
                                         id="date"
                                         type="date"
-                                        defaultValue="2017-05-24"
+                                        value={dateOfBirth}
+                                        defaultValue={dateOfBirth}
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
@@ -96,13 +113,14 @@ const AuthorsEditScreen = ({match, history}) => {
                             </Form.Group>
 
                             <Form.Group controlId='country'>
-                                <Form.Label>Country</Form.Label>
-                                <Form.Control
-                                    type='country'
-                                    placeholder='Enter country'
-                                    value={country}
-                                    onChange={(e) => setCountry(e.target.value)}
-                                ></Form.Control>
+                                <Form.Label>Country </Form.Label>
+                                <select onChange={(e) => setCountry(e.target.value)}>
+                                    {countries.map((country, index) => (
+                                        <option value={country}>
+                                            {country}
+                                        </option>
+                                    ))}
+                                </select>
                             </Form.Group>
                         </Col>
                     </Row>
