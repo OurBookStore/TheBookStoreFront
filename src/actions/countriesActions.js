@@ -7,11 +7,9 @@ import {getErrorMessage} from "../service/CommonUtils";
 
 export const countriesAction = () => async (dispatch) => {
     try {
-        console.log("1: ")
         dispatch({type: COUNTRY_LIST_REQUEST});
         //Get All Products Detail
         const countries = await getCountries();
-        console.log("2: ", countries)
         dispatch({
             type: COUNTRY_LIST_SUCCESS,
             payload: countries,

@@ -35,7 +35,11 @@ import {
     createProductReviewApi,
     updateBookApi,
     createBookApi,
-    getImageApi, getBookApi, getAllBooksDetailApi, deleteBookApi
+    getImageApi,
+    getBookApi,
+    getAllBooksDetailApi,
+    deleteBookApi,
+    searchBooksDetailApi
 } from '../service/RestApiCalls';
 import {logout} from "./userActions";
 import {listProductDetailsAction} from "./productActions";
@@ -45,6 +49,24 @@ export const listBooksAction = (pageNumber) => async (dispatch) => {
         dispatch({type: PRODUCT_LIST_REQUEST});
         //Get All Products Detail
         const allProductsDetail = await getAllBooksDetailApi();
+        dispatch({
+            type: PRODUCT_LIST_SUCCESS,
+            payload: allProductsDetail,
+            pageResponse: allProductsDetail
+        });
+    } catch (error) {
+        dispatch({
+            type: PRODUCT_LIST_FAIL,
+            payload: getErrorMessage(error)
+        });
+    }
+};
+
+export const searchBooksAction = (searchText, pageNumber) => async (dispatch) => {
+    try {
+        dispatch({type: PRODUCT_LIST_REQUEST});
+        //Get All Products Detail
+        const allProductsDetail = await searchBooksDetailApi(searchText);
         dispatch({
             type: PRODUCT_LIST_SUCCESS,
             payload: allProductsDetail,

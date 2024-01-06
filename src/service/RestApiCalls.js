@@ -284,6 +284,22 @@ export const uploadImageApi = async (axiosConfig, formData) => {
   return responseData;
 };
 
+export const addBookToAuthorApi = async (authorId, bookId) => {
+    const responseData = await axios.post(`${BACKEND_API_GATEWAY_URL}/authors/${authorId}/books/${bookId}`).then((response) => {
+        console.log('Resp ::', response.data);
+        return response.data;
+    });
+    return responseData;
+};
+
+export const removeBookToAuthorApi = async (authorId, bookId) => {
+    const responseData = await axios.delete(`${BACKEND_API_GATEWAY_URL}/authors/${authorId}/books/${bookId}`).then((response) => {
+        console.log('Resp ::', response.data);
+        return response.data;
+    });
+    return responseData;
+};
+
 export const getImageApi = async (imageId) => {
   const axiosConfig = getAxiosConfig();
   const responseData = axios.get(`${BACKEND_API_GATEWAY_URL}/images/${imageId}`, axiosConfig).then((response) => {
@@ -317,6 +333,15 @@ export const getAllBooksDetailApi = async (pageNumber) => {
   });
   console.log(responseData);
   return responseData;
+};
+
+export const searchBooksDetailApi = async (searchText, pageNumber) => {
+    console.log("api   ",searchText);
+    const responseData = await axios.get(`${BACKEND_API_GATEWAY_URL}/books/search/${searchText}`).then((response) => {
+        return response.data;
+    });
+    console.log(responseData);
+    return responseData;
 };
 
 export const addToCartApi = async (addToCartRequestBody) => {

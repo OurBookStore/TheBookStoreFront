@@ -9,7 +9,8 @@ import {
   productCreateReducer,
   productDeleteReducer,
   productUpdateReducer,
-  productImageReducer
+  productImageReducer,
+  countryListReducer
 } from './reducers/productReducers';
 import {
   userLoginReducer,
@@ -34,6 +35,7 @@ import { paymentMethodListMyReducer, paymentMethodSaveReducer } from './reducers
 
 const appReducer = combineReducers({
   productList: productListReducer,
+  countryList: countryListReducer,
   productDetails: productDetailsReducer,
   productReviews: productReviewsReducer,
   productReviewCreate: productReviewCreateReducer,

@@ -8,7 +8,7 @@ import { createProductReviewAction, listProductReviewsAction } from '../../actio
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import Rating from '../../components/Rating';
-import {getBookApi, getImageApi, getProductDetailApi} from '../../service/RestApiCalls';
+import {getBookApi, getImageApi, getProductDetailApi, removeBookToAuthorApi} from '../../service/RestApiCalls';
 
 const BookScreen = (props) => {
   const [qty, setQty] = useState(1);
@@ -74,16 +74,11 @@ const BookScreen = (props) => {
         <>
           <Row>
             <Col md={6}>
-              {productimageBase64 && (
-                <div style={{ minWidth: '100%', height: '400px' }}>
-                  <Image
-                    style={{ height: '100%', width: '100%' }}
-                    src={`${BACKEND_API_GATEWAY_URL}/api/catalog/image/${product?.imageId}`}
-                    alt={product.name}
-                    fluid
-                  ></Image>
-                </div>
-              )}
+                  <Card.Img
+                      src={`${BACKEND_API_GATEWAY_URL}/images/${product?.image}`}
+                      variant='top'
+                      style={{height: '250px'}}
+                  ></Card.Img>
             </Col>
             <Col md={3} style={{ borderLeft: '1px solid #eee' }}>
               <ListGroup variant='flush'>
@@ -95,6 +90,7 @@ const BookScreen = (props) => {
                 </ListGroupItem>
                 <ListGroupItem>Price : ${product.price}</ListGroupItem>
                 <ListGroupItem>Description : {product.description}</ListGroupItem>
+                <ListGroupItem>Authors : {product.authors.map(author=>author.fullName)}</ListGroupItem>
               </ListGroup>
             </Col>
             <Col md={3}>
