@@ -31,6 +31,7 @@ const PaymentScreen = ({ history }) => {
   const { paymentMethods, loading: listLoading, error: listError } = paymentMethodListMy;
 
   useEffect(() => {
+    debugger;
     dispatch(getMyPaymentMethodsAction());
   }, [dispatch]);
 

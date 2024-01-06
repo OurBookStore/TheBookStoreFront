@@ -37,7 +37,8 @@ export const addressSaveReducer = (state = {}, action) => {
   }
 };
 
-export const addressListMyReducer = (state = { addresses: [] }, action) => {
+
+export const addressListMyReducer = (state = { addresses: null }, action) => {
   switch (action.type) {
     case ADDRESS_LIST_MY_REQUEST:
       return {
@@ -60,6 +61,30 @@ export const addressListMyReducer = (state = { addresses: [] }, action) => {
       return state;
   }
 };
+
+// export const addressListMyReducer = (state = { addresses: [] }, action) => {
+//   switch (action.type) {
+//     case ADDRESS_LIST_MY_REQUEST:
+//       return {
+//         ...state,
+//         loading: true
+//       };
+//     case ADDRESS_LIST_MY_SUCCESS:
+//       return {
+//         loading: false,
+//         addresses: action.payload
+//       };
+//     case ADDRESS_LIST_MY_FAIL:
+//       return {
+//         loading: false,
+//         error: action.payload
+//       };
+//     case ADDRESS_LIST_MY_RESET:
+//       return { addresses: [] };
+//     default:
+//       return state;
+//   }
+// };
 
 export const addressDeleteReducer = (state = {}, action) => {
   switch (action.type) {
