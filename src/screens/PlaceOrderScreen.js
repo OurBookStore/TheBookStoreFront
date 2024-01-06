@@ -15,6 +15,10 @@ const PlaceOrderScreen = (props) => {
   const [error, setError] = useState(null);
   const order = useSelector((state) => state.order);
 
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+
   const orderPreview = useSelector((state) => state.orderPreview);
   const { loading: previewOrderLoading, order: previewOrderResponse } = orderPreview;
 
@@ -32,34 +36,31 @@ const PlaceOrderScreen = (props) => {
   }
 
   useEffect(() => {
-    debugger;
+
     previewOrder();
     // eslint-disable-next-line
-    if (createOrderResponse?.orderId != null) {
+    //Когда заказ создан на меня вкладки заказа
+    if (createOrderResponse?.id != null) {
       dispatch({
         type: 'ORDER_CREATE_RESET'
       });
-      props.history.push(`/order/${createOrderResponse.orderId}`);
+      props.history.push(`/order/${createOrderResponse.id}`);
     }
   }, [dispatch, createOrderResponse, order]);
 
   const previewOrder = () => {
-    const previewOrderRequestBody = {
-      billingAddressId: order.billingAddressId,
-      shippingAddressId: order.shippingAddressId,
-      paymentMethodId: order.paymentMethodId
-    };
-    dispatch(previewOrderAction(previewOrderRequestBody));
+    const id = userInfo.id;
+    dispatch(previewOrderAction(id));
   };
 
+  //Создание самого заказа
   const placeOrderHandler = () => {
     const placeOrderRequestBody = {
-      billingAddressId: order.billingAddressId,
-      shippingAddressId: order.shippingAddressId,
-      paymentMethodId: order.paymentMethodId
+      address: order.shippingAddressId,
+      appUserId: userInfo.id
     };
 
-    dispatch(placeOrderAction(placeOrderRequestBody));
+    dispatch(placeOrderAction(placeOrderRequestBody,userInfo.cartId));
   };
 
   return (
@@ -74,7 +75,7 @@ const PlaceOrderScreen = (props) => {
                 <h2>Shipping</h2>
                 <p>
                   <strong>Address:</strong>
-                  {previewOrderResponse.shippingAddress.addressLine1}
+                  {previewOrderResponse.address}
                   {/*{previewOrderResponse.shippingAddress.city},*/}
                   {/*{previewOrderResponse.shippingAddress.postalCode}, */}
                   {/*{previewOrderResponse.shippingAddress.country}*/}
@@ -89,11 +90,11 @@ const PlaceOrderScreen = (props) => {
 
               <ListGroup.Item>
                 <h2>Order Items</h2>
-                {previewOrderResponse.orderItems.length === 0 ? (
+                {previewOrderResponse?.orderPositions.length === 0 ? (
                   <Message>Your cart is empty</Message>
                 ) : (
                   <ListGroup variant='flush'>
-                    {previewOrderResponse.orderItems.map((item, index) => (
+                    {previewOrderResponse.orderPositions.map((item, index) => (
                       <ListGroup.Item key={index}>
                         <OrderItem item={item}></OrderItem>
                       </ListGroup.Item>
@@ -109,32 +110,32 @@ const PlaceOrderScreen = (props) => {
                 <ListGroup.Item>
                   <h2>Order Summary</h2>
                 </ListGroup.Item>
-                <ListGroup.Item>
-                  <Row>
-                    <Col>Items</Col>
-                    <Col>${previewOrderResponse.itemsTotalPrice}</Col>
-                  </Row>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <Row>
-                    <Col>Shipping</Col>
-                    <Col>${previewOrderResponse.shippingPrice}</Col>
-                  </Row>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <Row>
-                    <Col>Tax</Col>
-                    <Col>${previewOrderResponse.taxPrice}</Col>
-                  </Row>
-                </ListGroup.Item>
+                {/*<ListGroup.Item>*/}
+                {/*  <Row>*/}
+                {/*    <Col>Items</Col>*/}
+                {/*    <Col>${previewOrderResponse.itemsTotalPrice}</Col>*/}
+                {/*  </Row>*/}
+                {/*</ListGroup.Item>*/}
+                {/*<ListGroup.Item>*/}
+                {/*  <Row>*/}
+                {/*    <Col>Shipping</Col>*/}
+                {/*    <Col>${previewOrderResponse.shippingPrice}</Col>*/}
+                {/*  </Row>*/}
+                {/*</ListGroup.Item>*/}
+                {/*<ListGroup.Item>*/}
+                {/*  <Row>*/}
+                {/*    <Col>Tax</Col>*/}
+                {/*    <Col>${previewOrderResponse.taxPrice}</Col>*/}
+                {/*  </Row>*/}
+                {/*</ListGroup.Item>*/}
                 <ListGroup.Item>
                   <Row>
                     <Col>Total</Col>
-                    <Col>${previewOrderResponse.totalPrice}</Col>
+                    <Col>${previewOrderResponse?.totalPrice}</Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <Button type='button' className='btn-block' disabled={previewOrderResponse.orderItems === 0} onClick={placeOrderHandler}>
+                  <Button type='button' className='btn-block' disabled={previewOrderResponse?.orderPositions === 0} onClick={placeOrderHandler}>
                     Place Order
                   </Button>
                 </ListGroup.Item>

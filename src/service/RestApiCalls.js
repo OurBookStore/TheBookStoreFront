@@ -436,7 +436,7 @@ export const getAllMyOrdersApi = async (userId) => {
 export const previewOrderApi = async (previewOrderRequestBody) => {
   const axiosConfig = getAxiosConfig();
   const responseData = axios
-    .post(`${BACKEND_API_GATEWAY_URL}/api/order/previewOrder`, previewOrderRequestBody, axiosConfig)
+    .get(`${BACKEND_API_GATEWAY_URL}/carts/preview/${previewOrderRequestBody}`, axiosConfig)
     .then((response) => {
       return response.data;
     });
@@ -445,19 +445,37 @@ export const previewOrderApi = async (previewOrderRequestBody) => {
 
 export const placeOrderApi = async (placeOrderRequestBody) => {
   const axiosConfig = getAxiosConfig();
-  const responseData = axios.post(`${BACKEND_API_GATEWAY_URL}/api/order/order`, placeOrderRequestBody, axiosConfig).then((response) => {
+  debugger;
+  const responseData = axios.post(`${BACKEND_API_GATEWAY_URL}/orders`, placeOrderRequestBody, axiosConfig).then((response) => {
+    console.log('Resp ::', response.data);
     return response.data;
   });
   return responseData;
 };
 
-export const getOrderApi = async (orderId) => {
+export const fillOrderByCartPositionsApi = async (orderId,cartId) => {
   const axiosConfig = getAxiosConfig();
-  const responseData = axios.get(`${BACKEND_API_GATEWAY_URL}/api/order/order/${orderId}`, axiosConfig).then((response) => {
+  const responseData = axios.put(`${BACKEND_API_GATEWAY_URL}/orders/${orderId}/carts/${cartId}`,axiosConfig).then((response) => {
     return response.data;
   });
   return responseData;
 };
+
+export const getOrderById = async (orderId) => {
+  const axiosConfig = getAxiosConfig();
+  const responseData = axios.get(`${BACKEND_API_GATEWAY_URL}/orders/${orderId}`,axiosConfig).then((response) => {
+    return response.data;
+  });
+  return responseData;
+};
+
+// export const getOrderApi = async (orderId) => {
+//   const axiosConfig = getAxiosConfig();
+//   const responseData = axios.get(`${BACKEND_API_GATEWAY_URL}/api/order/order/${orderId}`, axiosConfig).then((response) => {
+//     return response.data;
+//   });
+//   return responseData;
+// };
 
 export const saveAddressApi = async (addressRequestBody) => {
   const axiosConfig = getAxiosConfig();

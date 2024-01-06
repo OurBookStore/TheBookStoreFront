@@ -22,11 +22,18 @@ import {
   ORDER_DELIVER_REQUEST
 } from '../constants/orderConstants';
 import { getErrorMessage } from '../service/CommonUtils';
-import { getAllMyOrdersApi, previewOrderApi, placeOrderApi, getOrderApi, getAllOrdersApi } from '../service/RestApiCalls';
+import {
+  getAllMyOrdersApi,
+  previewOrderApi,
+  placeOrderApi,
+  getOrderApi,
+  getAllOrdersApi,
+  fillOrderByCartPositionsApi, getOrderById
+} from '../service/RestApiCalls';
 
 export const saveBillingAddressIdToLocalStorage = (billingAddressId) => (dispatch) => {
   dispatch({
-    type: 'ORDER_SAVE_SHIPPING_ADDRESS',
+    type: 'ORDER_SAVE_BILLING_ADDRESS',
     payload: billingAddressId
   });
   localStorage.setItem('billingAddressId', billingAddressId);
@@ -34,7 +41,7 @@ export const saveBillingAddressIdToLocalStorage = (billingAddressId) => (dispatc
 
 export const saveShippingAddressIdToLocalStorage = (shippingAddressId) => (dispatch) => {
   dispatch({
-    type: 'ORDER_SAVE_BILLING_ADDRESS',
+    type: 'ORDER_SAVE_SHIPPING_ADDRESS',
     payload: shippingAddressId
   });
   localStorage.setItem('shippingAddressId', shippingAddressId);
@@ -112,19 +119,36 @@ export const previewOrderAction = (previewOrderRequestBody) => async (dispatch) 
   }
 };
 
-export const placeOrderAction = (placeOrderRequestBody) => async (dispatch) => {
+export const placeOrderAction = (placeOrderRequestBody,cartId) => (dispatch) => {
   try {
     dispatch({
       type: ORDER_CREATE_REQUEST
     });
 
-    //Place Order
-    const placeOrderData = await placeOrderApi(placeOrderRequestBody);
-
-    dispatch({
-      type: ORDER_CREATE_SUCCESS,
-      payload: placeOrderData
-    });
+    //Create Order
+    debugger;
+    placeOrderApi(placeOrderRequestBody).then(
+        (orderId) => {
+          return fillOrderByCartPositionsApi(orderId,cartId).then(
+            (orderId) => {
+              const order =  getOrderById(orderId).then
+              (order=> {
+                  dispatch({
+                    type: ORDER_CREATE_SUCCESS,
+                    payload: order
+                  });
+                }
+              )
+            }
+          )
+        }
+      )
+    // debugger;
+    // // const order = await getOrderById(orderId);
+    // dispatch({
+    //   type: ORDER_CREATE_SUCCESS,
+    //   payload: order
+    // });
   } catch (error) {
     dispatch({
       type: ORDER_CREATE_FAIL,
@@ -140,8 +164,9 @@ export const getOrderDetailsAction = (orderId) => async (dispatch) => {
     });
 
     //Get Order by Id
-    const getOrderData = await getOrderApi(orderId);
+    const getOrderData = await getOrderById(orderId);
 
+    debugger;
     dispatch({
       type: ORDER_DETAILS_SUCCESS,
       payload: getOrderData

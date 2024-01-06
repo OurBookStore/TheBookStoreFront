@@ -37,10 +37,13 @@ const OrderScreen = ({ match, history }) => {
   const { order, loading, error } = orderDetail;
 
   useEffect(() => {
+    debugger;
+    console.log("--------------We are in oreder!")
     if (!userInfo) {
       history.push('/login');
     }
     dispatch(getOrderDetailsAction(orderId));
+    console.log("-------------end")
   }, [dispatch, orderId]);
 
   const deliverHandler = () => {
@@ -51,6 +54,20 @@ const OrderScreen = ({ match, history }) => {
     return Math.floor(Math.random() * 10);
   };
 
+  const getActualStatus = () => {
+    return order.orderStatusHistories.find( status => status.actualFlag === true);
+  };
+
+  const isContainsStatus = ( statusName) => {
+    return order.orderStatusHistories.includes( status => {
+      return status.status === statusName;
+    })
+  };
+
+  const getStatusOptions = (statusName) => {
+    return order.orderStatusHistories.find( status => status.status === statusName);
+  };
+
   return (
     <>
       {loading === true ? (
@@ -59,7 +76,7 @@ const OrderScreen = ({ match, history }) => {
         <Message variant='danger'>{error}</Message>
       ) : (
         <>
-          <h1>Order - {order.orderId}</h1>
+          <h1>Order - {order.id}</h1>
           <hr></hr>
           <Row>
             <Col md={8}>
@@ -67,18 +84,20 @@ const OrderScreen = ({ match, history }) => {
                 <ListGroup.Item>
                   <h2>Shipping</h2>
                   <p>
-                    <strong>Name: </strong> {userInfo.userName}
+                    <strong>Name: </strong> {userInfo.username}
                   </p>
                   <p>
                     <strong>Email: </strong> <a href={`mailto:${userInfo.email}`}>{userInfo.email}</a>
                   </p>
                   <p>
                     <strong>Address:</strong>
-                    {order.shippingAddress.addressLine1}, {order.shippingAddress.city} {order.shippingAddress.postalCode},{' '}
-                    {order.shippingAddress.country}
+                    {order.address}
+                    {/*, */}
+                    {/*{order.shippingAddress.city} {order.shippingAddress.postalCode},{' '}*/}
+                    {/*{order.shippingAddress.country}*/}
                   </p>
-                  {order.delivered ? (
-                    <Message variant='success'>Delivered on {order.deliveredAt}</Message>
+                  { isContainsStatus('DELIVERING') ? (
+                    <Message variant='success'>Delivered on {getRandomNumber()}</Message>
                   ) : (
                     <Message variant='danger'>Not Delivered</Message>
                   )}
@@ -88,29 +107,29 @@ const OrderScreen = ({ match, history }) => {
                   <h2>Payment Method</h2>
                   <p>
                     <strong>Method: </strong>
-                    {order.card.cardBrand.toUpperCase()} - **** **** **** {order.card.last4Digits}
+                    {/*{order.card.cardBrand.toUpperCase()} - **** **** **** {order.card.last4Digits}*/}
                   </p>
-                  {order.paid ? (
-                    <Message variant='success'>Paid on {order.paymentDate}</Message>
+                  { isContainsStatus('PROCESSING') ? (
+                    <Message variant='success'>Paid on {getStatusOptions('PROCESSING').actualFrom}</Message>
                   ) : (
                     <Message variant='danger'>Not Paid</Message>
                   )}
 
                   <p>
                     <strong>Payment Receipt : </strong>
-                    <a href={order.paymentReceiptUrl} target='_blank'>
-                      {order.paymentReceiptUrl}
-                    </a>
+                    {/*<a href={order.paymentReceiptUrl} target='_blank'>*/}
+                    {/*  {order.paymentReceiptUrl}*/}
+                    {/*</a>*/}
                   </p>
                 </ListGroup.Item>
 
                 <ListGroup.Item>
                   <h2>Order Items</h2>
-                  {order.orderItems.length === 0 ? (
+                  {order.orderPositions.length === 0 ? (
                     <Message>Order is empty</Message>
                   ) : (
                     <ListGroup variant='flush'>
-                      {order.orderItems.map((item, index) => (
+                      {order.orderPositions.map((item, index) => (
                         <OrderItem item={item}></OrderItem>
                       ))}
                     </ListGroup>
@@ -124,38 +143,38 @@ const OrderScreen = ({ match, history }) => {
                   <ListGroup.Item>
                     <h2>Order Summary</h2>
                   </ListGroup.Item>
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>Items</Col>
-                      <Col>${order.itemsTotalPrice}</Col>
-                    </Row>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>Shipping</Col>
-                      <Col>${order.shippingPrice}</Col>
-                    </Row>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>Tax</Col>
-                      <Col>${order.taxPrice}</Col>
-                    </Row>
-                  </ListGroup.Item>
+                  {/*<ListGroup.Item>*/}
+                  {/*  <Row>*/}
+                  {/*    <Col>Items</Col>*/}
+                  {/*    <Col>${order.totalPrice}</Col>*/}
+                  {/*  </Row>*/}
+                  {/*</ListGroup.Item>*/}
+                  {/*<ListGroup.Item>*/}
+                  {/*  <Row>*/}
+                  {/*    <Col>Shipping</Col>*/}
+                  {/*    <Col>${order.shippingPrice}</Col>*/}
+                  {/*  </Row>*/}
+                  {/*</ListGroup.Item>*/}
+                  {/*<ListGroup.Item>*/}
+                  {/*  <Row>*/}
+                  {/*    <Col>Tax</Col>*/}
+                  {/*    <Col>${order.taxPrice}</Col>*/}
+                  {/*  </Row>*/}
+                  {/*</ListGroup.Item>*/}
                   <ListGroup.Item>
                     <Row>
                       <Col>Total</Col>
                       <Col>${order.totalPrice}</Col>
                     </Row>
                   </ListGroup.Item>
-                  {loadingDeliver && <Loader />}
-                  {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
-                    <ListGroup.Item>
-                      <Button type='button' className='btn btn-block' onClick={deliverHandler}>
-                        Mark As Delivered
-                      </Button>
-                    </ListGroup.Item>
-                  )}
+                  {/*{loadingDeliver && <Loader />}*/}
+                  {/*{userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (*/}
+                  {/*  <ListGroup.Item>*/}
+                  {/*    <Button type='button' className='btn btn-block' onClick={deliverHandler}>*/}
+                  {/*      Mark As Delivered*/}
+                  {/*    </Button>*/}
+                  {/*  </ListGroup.Item>*/}
+                  {/*)}*/}
                 </ListGroup>
               </Card>
             </Col>

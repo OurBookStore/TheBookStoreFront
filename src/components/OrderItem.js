@@ -15,8 +15,10 @@ const OrderItem = ({ item }) => {
 
   useEffect(async () => {
     try {
-      const productDetail = await getProductDetailApi(item.productId);
-      setProduct(productDetail);
+      // const productDetail = await getProductDetailApi(item.productId);
+      // setProduct(productDetail);
+      // setLoading(false);
+      setProduct(item.book);
       setLoading(false);
     } catch (err) {
       setError(getErrorMessage(err));
@@ -32,20 +34,20 @@ const OrderItem = ({ item }) => {
         <ListGroup.Item key={item.productId}>
           <Row>
             <Col md={2}>
-              <Image src={`${BACKEND_API_GATEWAY_URL}/api/catalog/image/${product?.imageId}`} alt={item.productName} fluid rounded></Image>
+              <Image src={`${BACKEND_API_GATEWAY_URL}/images/${product?.image}`} alt={product.name} fluid rounded></Image>
             </Col>
             <Col md={3} className='pt-4'>
-              <Link to={`/product/${item.productId}`}>{product.productName}</Link>
+              <Link to={`/book/${product.id}`}>{product.name}</Link>
             </Col>
             <Col md={2} className='pt-4'>
-              ${item.orderItemPrice}
+              ${item.price}
             </Col>
             <Col md={2} className='pt-4'>
-              {item.quantity}
+              {item.count}
             </Col>
-            <Col md={1} className='pt-4'>
-              ${item.orderExtendedPrice}
-            </Col>
+            {/*<Col md={1} className='pt-4'>*/}
+            {/*  ${item.orderExtendedPrice}*/}
+            {/*</Col>*/}
           </Row>
         </ListGroup.Item>
       )}
