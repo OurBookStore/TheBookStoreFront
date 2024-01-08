@@ -42,7 +42,7 @@ import {
     getBookApi,
     getAllBooksPageDetailApi,
     deleteBookApi,
-    searchBooksDetailApi, getAllBooksDetailApi
+    searchBooksDetailApi, getAllBooksDetailApi, getDefaultsDatesApi
 } from '../service/RestApiCalls';
 import {logout} from "./userActions";
 import {listProductDetailsAction} from "./productActions";
@@ -84,15 +84,16 @@ export const listBooksAction = () => async (dispatch) => {
 };
 
 
-export const searchBooksAction = (searchText, pageNumber) => async (dispatch) => {
+export const searchBooksAction = (request) => async (dispatch) => {
     try {
         dispatch({type: PRODUCT_LIST_REQUEST});
+        console.log("request ", request)
         //Get All Products Detail
-        const allProductsDetail = await searchBooksDetailApi(searchText);
+        const allProductsDetail = await searchBooksDetailApi(request);
         dispatch({
             type: PRODUCT_LIST_SUCCESS,
             payload: allProductsDetail,
-            pageResponse: allProductsDetail
+            pageResponse: allProductsDetail.totalPages
         });
     } catch (error) {
         dispatch({
@@ -108,6 +109,25 @@ export const getBookAction = (bookId) => async (dispatch) => {
 
         //Get Product Detail
         const productDetail = await getBookApi(bookId);
+        console.log(productDetail)
+        dispatch({
+            type: PRODUCT_DETAILS_SUCCESS,
+            payload: productDetail
+        });
+    } catch (error) {
+        dispatch({
+            type: PRODUCT_DETAILS_FAIL,
+            payload: getErrorMessage(error)
+        });
+    }
+};
+
+export const getDefaultsDatesAction = () => async (dispatch) => {
+    try {
+        dispatch({type: PRODUCT_DETAILS_REQUEST});
+
+        //Get Product Detail
+        const productDetail = await getDefaultsDatesApi();
         console.log(productDetail)
         dispatch({
             type: PRODUCT_DETAILS_SUCCESS,

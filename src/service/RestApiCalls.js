@@ -181,6 +181,13 @@ export const getBookApi = async (bookId) => {
   return responseData;
 };
 
+export const getDefaultsDatesApi = async () => {
+  const responseData = axios.get(`${BACKEND_API_GATEWAY_URL}/books/search/defaults`).then((response) => {
+    return response.data;
+  });
+  return responseData;
+};
+
 export const createBookApi = async (bookReqBody) => {
   const axiosConfig = getAxiosConfig();
   const responseData = await axios.post(`${BACKEND_API_GATEWAY_URL}/books`, bookReqBody, axiosConfig).then((response) => {
@@ -343,12 +350,10 @@ export const getAllBooksDetailApi = async () => {
   return responseData;
 };
 
-export const searchBooksDetailApi = async (searchText, pageNumber) => {
-    console.log("api   ",searchText);
-    const responseData = await axios.get(`${BACKEND_API_GATEWAY_URL}/books/search/${searchText}`).then((response) => {
+export const searchBooksDetailApi = async (request) => {
+    const responseData = await axios.post(`${BACKEND_API_GATEWAY_URL}/books/search`, request).then((response) => {
         return response.data;
     });
-    console.log(responseData);
     return responseData;
 };
 
