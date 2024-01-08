@@ -24,7 +24,6 @@ const CartItem = ({ item, updateItemCart ,props}) => {
       const productDetail = await getBookApi(item.book.id);
       setProduct(productDetail);
       setLoading(false);
-
     } catch (err) {
       setError(getErrorMessage(err));
     }
@@ -52,33 +51,32 @@ const CartItem = ({ item, updateItemCart ,props}) => {
                   rounded
               ></Image>
             </Col>
-            <Col md={3} className='pt-4'>
+            <Col md={2} className='pt-3'>
               <Link to={`/book/${item.book.id}`}>{item.book.name}</Link>
             </Col>
             <Col md={2} className='pt-4'>
+              {product?.authors?.map((author) => (author.fullName)).join(", ")}
+            </Col>
+            <Col md={1} className='pt-4'>
               ${item.book.price}
             </Col>
             <Col md={2} className='pt-3'>
               {product && (
                 <>
                   <Form.Control as='select' value={item.count} onChange={(e) => updateItemCart(item.id, e.target.value)}>
-                    {item.book.count > 11
-                      ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => (
-                          <option key={x + 1} value={x + 1}>
-                            {x + 1}
-                          </option>
-                        ))
-                      : [...Array(item.book.count).keys()].map((x) => (
-                          <option key={x + 1} value={x + 1}>
-                            {x + 1}
-                          </option>
-                        ))}
+                    {
+                      [...Array(item.book.count).keys()].map((x) => (
+                      <option key={x + 1} value={x + 1}>
+                        {x + 1}
+                      </option>
+                    ))
+                    }
                   </Form.Control>
                 </>
               )}
             </Col>
             <Col md={1} className='pt-4'>
-              ${item.price}
+              Subtotal: ${item.price}
             </Col>
             <Col md={2} className='pt-3 pl-5'>
               <Button type='button' variant='light' onClick={() => removeFromCartHandler(item.id)}>

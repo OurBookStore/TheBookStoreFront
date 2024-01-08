@@ -19,6 +19,7 @@ const OrderItem = ({ item }) => {
       // setProduct(productDetail);
       // setLoading(false);
       setProduct(item.book);
+      console.log("item",item)
       setLoading(false);
     } catch (err) {
       setError(getErrorMessage(err));
@@ -38,6 +39,9 @@ const OrderItem = ({ item }) => {
             </Col>
             <Col md={3} className='pt-4'>
               <Link to={`/book/${product.id}`}>{product.name}</Link>
+            </Col>
+            <Col md={2} className='pt-4'>
+              {product?.authors?.map((author) => (author.fullName)).join(", ")}
             </Col>
             <Col md={2} className='pt-4'>
               ${item.price}

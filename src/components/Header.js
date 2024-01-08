@@ -62,9 +62,9 @@ const Header = (props) => {
                   <LinkContainer to='/admin/books'>
                     <NavDropdown.Item>Books</NavDropdown.Item>
                   </LinkContainer>
-                  {/*<LinkContainer to='/admin/orderlist'>*/}
-                  {/*  <NavDropdown.Item>Orders</NavDropdown.Item>*/}
-                  {/*</LinkContainer>*/}
+                  <LinkContainer to='/admin/orderlist'>
+                    <NavDropdown.Item>Orders</NavDropdown.Item>
+                  </LinkContainer>
                 </NavDropdown>
               )}
             </Nav>

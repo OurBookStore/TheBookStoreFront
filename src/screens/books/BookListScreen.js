@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {isAdmin} from '../../service/CommonUtils';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import {listBooksAction, deleteBookAction} from '../../actions/booksActions';
+import { listBooksActionWithPaginate, deleteBookAction, listBooksAction } from '../../actions/booksActions';
 import {PRODUCT_CREATE_RESET} from '../../constants/productConstants';
 import ReactPaginate from 'react-paginate';
 import {BACKEND_API_GATEWAY_URL} from "../../constants/appConstants";
@@ -14,7 +14,7 @@ const BookListScreen = ({history, match}) => {
     console.log("---------> 1")
     const dispatch = useDispatch();
 
-    const bookList = useSelector((state) => state.productList);
+    const bookList = useSelector((state) => state.bookAdminList);
     const {loading, error, products: books, pageResponse} = bookList;
 
     const bookDelete = useSelector((state) => state.productDelete);
@@ -34,7 +34,7 @@ const BookListScreen = ({history, match}) => {
             history.push('/login');
         }
         console.log("---------> 4")
-        await dispatch(listBooksAction(0));
+        await dispatch(listBooksAction());
     }, [dispatch, history, userInfo, successDelete, successCreate, createdProduct]);
 
     const deleteHandler = (id) => {
@@ -49,7 +49,7 @@ const BookListScreen = ({history, match}) => {
 
     const handlePageClick = (data) => {
         let selected = data.selected;
-        dispatch(listBooksAction(selected));
+        dispatch(listBooksActionWithPaginate(selected));
     };
 
     return (

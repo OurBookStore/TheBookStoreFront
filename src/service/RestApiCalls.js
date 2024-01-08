@@ -327,7 +327,15 @@ export const getAllProductsDetailApi = async (pageNumber) => {
   return responseData;
 };
 
-export const getAllBooksDetailApi = async (pageNumber) => {
+export const getAllBooksPageDetailApi = async (pageNumber) => {
+  const responseData = await axios.get(`${BACKEND_API_GATEWAY_URL}/books/page/${pageNumber}`).then((response) => {
+    return response.data;
+  });
+  console.log(responseData);
+  return responseData;
+};
+
+export const getAllBooksDetailApi = async () => {
   const responseData = await axios.get(`${BACKEND_API_GATEWAY_URL}/books`).then((response) => {
     return response.data;
   });
@@ -420,7 +428,7 @@ export const removeCartItemApi = async (positionId) => {
 
 export const getAllOrdersApi = async () => {
   const axiosConfig = getAxiosConfig();
-  const responseData = axios.get(`${BACKEND_API_GATEWAY_URL}/api/order/orders`, axiosConfig).then((response) => {
+  const responseData = axios.get(`${BACKEND_API_GATEWAY_URL}/orders`, axiosConfig).then((response) => {
     return response.data;
   });
   return responseData;
@@ -433,6 +441,7 @@ export const getAllMyOrdersApi = async (userId) => {
   });
   return responseData;
 };
+
 export const previewOrderApi = async (previewOrderRequestBody) => {
   const axiosConfig = getAxiosConfig();
   const responseData = axios
@@ -469,13 +478,13 @@ export const getOrderById = async (orderId) => {
   return responseData;
 };
 
-// export const getOrderApi = async (orderId) => {
-//   const axiosConfig = getAxiosConfig();
-//   const responseData = axios.get(`${BACKEND_API_GATEWAY_URL}/api/order/order/${orderId}`, axiosConfig).then((response) => {
-//     return response.data;
-//   });
-//   return responseData;
-// };
+export const addOrderStatus = async (statusBody,orderId) => {
+  const axiosConfig = getAxiosConfig();
+  const responseData = axios.put(`${BACKEND_API_GATEWAY_URL}/orders/${orderId}`,statusBody,axiosConfig).then((response) => {
+    return response.data;
+  });
+  return responseData;
+};
 
 export const saveAddressApi = async (addressRequestBody) => {
   const axiosConfig = getAxiosConfig();

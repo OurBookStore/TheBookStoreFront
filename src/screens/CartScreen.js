@@ -89,7 +89,7 @@ const CartScreen = (props) => {
             <h1>Shopping Cart </h1>
           </Row>
           <Row>
-            <Col md={8}>
+            <Col md={9}>
               {cart == null || cart?.cartItems?.length == 0 ? (
                   <Message>
                   Your cart is empty <Link to='/'>Go Back</Link>
@@ -107,11 +107,11 @@ const CartScreen = (props) => {
                 </LinkContainer>
               </Row>
             </Col>
-            <Col md={4}>
+            <Col md={3}>
               <Card>
                 <ListGroup variant='flush'>
                   <ListGroup.Item>
-                    <h3>Subtotal ({cart?.cartItems?.length}) Items</h3>
+                    <h3>Total ({cart?.cartItems?.length}) Items</h3>
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <h3>${cart?.total}</h3>

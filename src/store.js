@@ -3,6 +3,8 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import {
   productListReducer,
+  bookAdminListReducer,
+  authorAdminListReducer,
   productDetailsReducer,
   productReviewsReducer,
   productReviewCreateReducer,
@@ -27,6 +29,7 @@ import {
   orderPreviewReducer,
   orderCreateReducer,
   orderDetailsReducer,
+  orderStatusReducer,
   orderListAllReducer
 } from './reducers/orderReducers';
 import { cartAddReducer, cartDetailReducer, cartRemoveReducer,cartReducer,cartUpdateItemReducer } from './reducers/cartReducers';
@@ -35,6 +38,8 @@ import { paymentMethodListMyReducer, paymentMethodSaveReducer } from './reducers
 
 const appReducer = combineReducers({
   productList: productListReducer,
+  bookAdminList: bookAdminListReducer,
+  authorAdminList: authorAdminListReducer,
   countryList: countryListReducer,
   productDetails: productDetailsReducer,
   productReviews: productReviewsReducer,
@@ -60,6 +65,7 @@ const appReducer = combineReducers({
   orderPreview: orderPreviewReducer,
   orderCreate: orderCreateReducer,
   orderDetails: orderDetailsReducer,
+  orderStatus: orderStatusReducer,
   addressSave: addressSaveReducer,
   addressListMy: addressListMyReducer,
   addressDelete: addressDeleteReducer,

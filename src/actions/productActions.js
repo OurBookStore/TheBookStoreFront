@@ -35,7 +35,7 @@ import {
   createProductReviewApi,
   updateBookApi,
   createBookApi,
-  getImageApi, getAllBooksDetailApi, deleteBookApi
+  getImageApi, getAllBooksPageDetailApi, deleteBookApi
 } from '../service/RestApiCalls';
 import {logout} from "./userActions";
 

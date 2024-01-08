@@ -32,7 +32,12 @@ import {
   PRODUCT_IMAGE_RESET,
   COUNTRY_LIST_REQUEST,
   COUNTRY_LIST_SUCCESS,
-  COUNTRY_LIST_FAIL
+  COUNTRY_LIST_FAIL,
+  BOOK_ADMIN_LIST_REQUEST,
+  BOOK_ADMIN_LIST_SUCCESS,
+  BOOK_ADMIN_LIST_FAIL,
+  AUTHOR_ADMIN_LIST_REQUEST,
+  AUTHOR_ADMIN_LIST_SUCCESS, AUTHOR_ADMIN_LIST_FAIL
 } from '../constants/productConstants';
 
 export const productListReducer = (state = { products: [] }, action) => {
@@ -47,6 +52,33 @@ export const productListReducer = (state = { products: [] }, action) => {
       return state;
   }
 };
+
+export const bookAdminListReducer = (state = { products: [] }, action) => {
+  switch (action.type) {
+    case BOOK_ADMIN_LIST_REQUEST:
+      return { loading: true, products: [] };
+    case BOOK_ADMIN_LIST_SUCCESS:
+      return { loading: false, products: action.payload, pageResponse: action.pageResponse };
+    case BOOK_ADMIN_LIST_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const authorAdminListReducer = (state = { products: [] }, action) => {
+  switch (action.type) {
+    case AUTHOR_ADMIN_LIST_REQUEST:
+      return { loading: true, products: [] };
+    case AUTHOR_ADMIN_LIST_SUCCESS:
+      return { loading: false, products: action.payload, pageResponse: action.pageResponse };
+    case AUTHOR_ADMIN_LIST_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
 
 export const countryListReducer = (state = { countries: [] }, action) => {
   switch (action.type) {

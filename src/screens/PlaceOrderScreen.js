@@ -38,6 +38,8 @@ const PlaceOrderScreen = (props) => {
   useEffect(() => {
 
     previewOrder();
+
+    console.log("orders preview",previewOrderResponse)
     // eslint-disable-next-line
     //Когда заказ создан на меня вкладки заказа
     if (createOrderResponse?.id != null) {
@@ -65,7 +67,7 @@ const PlaceOrderScreen = (props) => {
 
   return (
     <>
-      <CheckoutSteps step1 step2 step3 step4 />
+      <CheckoutSteps step1 step2 step3 />
       {previewOrderLoading === true && <Loader></Loader>}
       {previewOrderLoading === false && (
         <Row>

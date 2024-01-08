@@ -5,8 +5,10 @@ import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { getOrderDetailsAction } from '../actions/orderActions';
 import OrderItem from '../components/OrderItem';
+import { isAdmin } from '../service/CommonUtils';
+import { getOrderDetailsAction, addOrderStatusAction } from '../actions/orderActions';
+
 // import { getOrderDetails, payOrder, deliverOrder } from '../actions/orderActions';
 // import { ORDER_PAY_RESET, ORDER_DELIVER_RESET } from '../constants/orderConstants';
 
@@ -36,8 +38,10 @@ const OrderScreen = ({ match, history }) => {
   const orderDetail = useSelector((state) => state.orderDetails);
   const { order, loading, error } = orderDetail;
 
+  const orderDetailStatus = useSelector((state) => state.orderStatus);
+  const { orderStatus, loadingStatus, errorStatus } = orderDetailStatus;
+
   useEffect(() => {
-    debugger;
     console.log("--------------We are in oreder!")
     if (!userInfo) {
       history.push('/login');
@@ -46,8 +50,17 @@ const OrderScreen = ({ match, history }) => {
     console.log("-------------end")
   }, [dispatch, orderId]);
 
-  const deliverHandler = () => {
-    // dispatch(deliverOrder(order));
+  const doneHandler = () => {
+    statusHandler('DONE');
+  };
+
+  const statusHandler = (status) => {
+    setLoadingDeliver(true);
+
+    const orderStatusBody = {
+      OrderStatus: status
+    }
+    dispatch(addOrderStatusAction(orderStatusBody,orderId));
   };
 
   const getRandomNumber = () => {
@@ -82,6 +95,26 @@ const OrderScreen = ({ match, history }) => {
             <Col md={8}>
               <ListGroup variant='flush'>
                 <ListGroup.Item>
+                  <h2>Payment Method</h2>
+                  <p>
+                    <strong>Method: </strong>
+                    {/*{order.card.cardBrand.toUpperCase()} - **** **** **** {order.card.last4Digits}*/}
+                  </p>
+                  { isContainsStatus('DELIVERING') ? (
+                    <Message variant='success'>Paid on {getStatusOptions('DELIVERING').actualFrom}</Message>
+                  ) : (
+                    <Message variant='danger'>Not Paid</Message>
+                  )}
+
+                  <p>
+                    <strong>Payment Receipt : </strong>
+                    {/*<a href={order.paymentReceiptUrl} target='_blank'>*/}
+                    {/*  {order.paymentReceiptUrl}*/}
+                    {/*</a>*/}
+                  </p>
+                </ListGroup.Item>
+
+                <ListGroup.Item>
                   <h2>Shipping</h2>
                   <p>
                     <strong>Name: </strong> {userInfo.username}
@@ -96,31 +129,11 @@ const OrderScreen = ({ match, history }) => {
                     {/*{order.shippingAddress.city} {order.shippingAddress.postalCode},{' '}*/}
                     {/*{order.shippingAddress.country}*/}
                   </p>
-                  { isContainsStatus('DELIVERING') ? (
-                    <Message variant='success'>Delivered on {getRandomNumber()}</Message>
+                  { isContainsStatus('DONE') ? (
+                    <Message variant='success'>Delivered on {getStatusOptions('DONE').actualFrom}</Message>
                   ) : (
                     <Message variant='danger'>Not Delivered</Message>
                   )}
-                </ListGroup.Item>
-
-                <ListGroup.Item>
-                  <h2>Payment Method</h2>
-                  <p>
-                    <strong>Method: </strong>
-                    {/*{order.card.cardBrand.toUpperCase()} - **** **** **** {order.card.last4Digits}*/}
-                  </p>
-                  { isContainsStatus('PROCESSING') ? (
-                    <Message variant='success'>Paid on {getStatusOptions('PROCESSING').actualFrom}</Message>
-                  ) : (
-                    <Message variant='danger'>Not Paid</Message>
-                  )}
-
-                  <p>
-                    <strong>Payment Receipt : </strong>
-                    {/*<a href={order.paymentReceiptUrl} target='_blank'>*/}
-                    {/*  {order.paymentReceiptUrl}*/}
-                    {/*</a>*/}
-                  </p>
                 </ListGroup.Item>
 
                 <ListGroup.Item>
@@ -138,11 +151,28 @@ const OrderScreen = ({ match, history }) => {
               </ListGroup>
             </Col>
             <Col md={4}>
+
               <Card>
                 <ListGroup variant='flush'>
                   <ListGroup.Item>
                     <h2>Order Summary</h2>
                   </ListGroup.Item>
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>Total</Col>
+                      <Col>${order.totalPrice}</Col>
+                    </Row>
+                  </ListGroup.Item>
+                  {loadingStatus&& <Loader />}
+                  {
+                    userInfo && isAdmin() && isContainsStatus('DELIVERING') &&(
+                      <ListGroup.Item>
+                        <Button type='button' className='btn btn-block' onClick={ doneHandler}>
+                          Mark As Delivered
+                        </Button>
+                      </ListGroup.Item>
+                    )
+                  }
                   {/*<ListGroup.Item>*/}
                   {/*  <Row>*/}
                   {/*    <Col>Items</Col>*/}
@@ -161,22 +191,10 @@ const OrderScreen = ({ match, history }) => {
                   {/*    <Col>${order.taxPrice}</Col>*/}
                   {/*  </Row>*/}
                   {/*</ListGroup.Item>*/}
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>Total</Col>
-                      <Col>${order.totalPrice}</Col>
-                    </Row>
-                  </ListGroup.Item>
                   {/*{loadingDeliver && <Loader />}*/}
-                  {/*{userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (*/}
-                  {/*  <ListGroup.Item>*/}
-                  {/*    <Button type='button' className='btn btn-block' onClick={deliverHandler}>*/}
-                  {/*      Mark As Delivered*/}
-                  {/*    </Button>*/}
-                  {/*  </ListGroup.Item>*/}
-                  {/*)}*/}
                 </ListGroup>
               </Card>
+
             </Col>
           </Row>
         </>

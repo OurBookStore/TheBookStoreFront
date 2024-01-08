@@ -58,7 +58,7 @@ function App() {
           <Route path='/admin/author/create' component={AuthorsCreateScreen} />
           <Route path='/admin/author/:id/edit' component={AuthorsEditScreen} />
 
-          {/*<Route path='/admin/orderlist' component={OrderListScreen} />*/}
+          <Route path='/admin/orderlist' component={OrderListScreen} />
 
           <Route path='/' component={HomeBookScreen} exact></Route>
         </Container>

@@ -25,7 +25,10 @@ import {
     PRODUCT_TOP_FAIL,
     PRODUCT_IMAGE_REQUEST,
     PRODUCT_IMAGE_SUCCESS,
-    PRODUCT_IMAGE_FAIL
+    PRODUCT_IMAGE_FAIL,
+    AUTHOR_ADMIN_LIST_REQUEST,
+    AUTHOR_ADMIN_LIST_SUCCESS,
+    AUTHOR_ADMIN_LIST_FAIL
 } from '../constants/productConstants';
 import {getErrorMessage} from '../service/CommonUtils';
 import {
@@ -37,7 +40,7 @@ import {
     createBookApi,
     getImageApi,
     getBookApi,
-    getAllBooksDetailApi,
+    getAllBooksPageDetailApi,
     deleteBookApi,
     deleteAuthorApi,
     updateAuthorApi,
@@ -49,17 +52,17 @@ import {listProductDetailsAction} from "./productActions";
 
 export const getAllAuthorAction = (pageNumber) => async (dispatch) => {
     try {
-        dispatch({type: PRODUCT_LIST_REQUEST});
-        //Get All Products Detail
+        dispatch({type: AUTHOR_ADMIN_LIST_REQUEST});
+        //Get All Author Detail
         const allProductsDetail = await getAllAuthorsApi();
         dispatch({
-            type: PRODUCT_LIST_SUCCESS,
+            type: AUTHOR_ADMIN_LIST_SUCCESS,
             payload: allProductsDetail,
             pageResponse: allProductsDetail
         });
     } catch (error) {
         dispatch({
-            type: PRODUCT_LIST_FAIL,
+            type: AUTHOR_ADMIN_LIST_FAIL,
             payload: getErrorMessage(error)
         });
     }
