@@ -8,7 +8,7 @@ import {Button, Col, Form, Row} from 'react-bootstrap';
 import FullPageLoader from '../components/FullPageLoader';
 import ReactPaginate from 'react-paginate';
 import {BACKEND_API_GATEWAY_URL} from "../constants/appConstants";
-import {listBooksAction, searchBooksAction} from "../actions/booksActions";
+import {listBooksActionWithPaginate, searchBooksAction} from "../actions/booksActions";
 
 const HomeBookScreen = () => {
     const dispatch = useDispatch();
@@ -18,19 +18,19 @@ const HomeBookScreen = () => {
     const {loading, error, products, pageResponse} = productList;
 
     useEffect(() => {
-        dispatch(listBooksAction());
+        dispatch(listBooksActionWithPaginate(0));
     }, [dispatch]);
 
     const handlePageClick = (data) => {
         let selected = data.selected;
-        dispatch(listBooksAction());
+        dispatch(listBooksActionWithPaginate(selected));
     };
 
     const searchBooks = () => {
         if (searchText.length > 2) {
             dispatch(searchBooksAction(searchText));
         } else {
-            dispatch(listBooksAction());
+            dispatch(listBooksActionWithPaginate(0));
         }
     };
 
@@ -55,7 +55,7 @@ const HomeBookScreen = () => {
                         </Form.Group>
                         <Row>
                             {
-                                products.map((product) => (
+                                products?.books?.map((product) => (
                                         <Col key={product.id} sm={12} md={6} lg={4} xl={3}>
                                             <Product key={product.id} product={product}></Product>
                                         </Col>

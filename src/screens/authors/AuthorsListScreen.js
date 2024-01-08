@@ -12,7 +12,7 @@ const AuthorsListScreen = ({history, match}) => {
     console.log("---------> 1")
     const dispatch = useDispatch();
 
-    const authorList = useSelector((state) => state.productList);
+    const authorList = useSelector((state) => state.authorAdminList);
     const {loading, error, products: authors, pageResponse} = authorList;
 
     const authorDelete = useSelector((state) => state.productDelete);
@@ -29,7 +29,7 @@ const AuthorsListScreen = ({history, match}) => {
         if (!userInfo || !isAdmin()) {
             history.push('/login');
         }
-        await dispatch(getAllAuthorAction(0));
+        await dispatch(getAllAuthorAction());
     }, [dispatch, history, userInfo, successDelete, successCreate, createdProduct]);
 
     const deleteHandler = (id) => {
@@ -80,7 +80,7 @@ const AuthorsListScreen = ({history, match}) => {
                         </tr>
                         </thead>
                         <tbody>
-                        {authors?.sort((a, b) => a.id - b.id).map((author) => (
+                        {authors?.sort((a, b) => a.id - b.id)?.map((author) => (
                             <tr key={author.id}>
                                 <td>{author.id}</td>
                                 <td>{author.fullName}</td>

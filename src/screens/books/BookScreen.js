@@ -9,6 +9,8 @@ import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import Rating from '../../components/Rating';
 import {getBookApi, getImageApi, getProductDetailApi, removeBookToAuthorApi} from '../../service/RestApiCalls';
+import { addPositionAction, addToCartAction } from '../../actions/cartActions';
+import addNotification, { Notifications } from 'react-push-notification';
 
 const BookScreen = (props) => {
   const [qty, setQty] = useState(1);
@@ -45,10 +47,39 @@ const BookScreen = (props) => {
     // }
   }, [dispatch, product?.imageId]);
 
+  function buttonOnClick (){
+    addNotification({
+      title: "Success",
+      subtitle: "You have successfully added book to cart",
+      message: "For buy go to the cart",
+      theme: "light",
+      closeButton: "X",
+      backgroundTop: "green",
+      backgroundBottom: "yellowgreen",
+    })
+  }
+
   const addToCartHandler = () => {
-    console.log(`Число: ${qty}`);
-    console.log(`Хрен занеат что: ${props.match.params.id}`);
-    props.history.push(`/cart/${props.match.params.id}?qty=${qty}`);
+    // props.history.push(`/cart/${props.match.params.id}?qty=${qty}`);
+    addBookToCart(props.match.params.id,qty);
+    buttonOnClick();
+  };
+
+  const addBookToCart = (pId, q) => {
+    const addPositionRequestBody = {
+      bookId:  pId,
+      count:  q
+    };
+    const promisePositionId = dispatch(addPositionAction(addPositionRequestBody));
+    promisePositionId.then(function (positionId){
+      const addToCartPositionRequestBody = {
+        orderPositionId: positionId,
+        cartId: userLogin.userInfo.cartId
+      };
+      dispatch(addToCartAction(addToCartPositionRequestBody));
+    }, function (error){
+      console.log("info err", error);
+    });
   };
 
   const createProductReviewHandler = (e) => {
@@ -118,24 +149,21 @@ const BookScreen = (props) => {
                         <Col>Qty</Col>
                         <Col>
                           <Form.Control as='select' value={qty} onChange={(e) => setQty(e.target.value)}>
-                            {product.count > 10
-                              ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => (
+                            {
+                              [...Array(product.count).keys()].map((x) => (
                                   <option key={x + 1} value={x + 1}>
                                     {x + 1}
                                   </option>
                                 ))
-                              : [...Array(product.count).keys()].map((x) => (
-                                  <option key={x + 1} value={x + 1}>
-                                    {x + 1}
-                                  </option>
-                                ))}
+                            }
                           </Form.Control>
                         </Col>
                       </Row>
                     </ListGroup.Item>
                   )}
-
+                  <Notifications />
                   <ListGroupItem>
+
                     <Button onClick={addToCartHandler} className='btn-block' type='button' disabled={product.count <= 0}>
                       Add to Cart
                     </Button>
@@ -146,6 +174,7 @@ const BookScreen = (props) => {
           </Row>
         </>
       ) : null}
+      <Notifications />
       {loading && <FullPageLoader></FullPageLoader>}
     </>
   );

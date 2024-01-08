@@ -31,13 +31,15 @@ const ProfileScreen = ({ history }) => {
   const orderListMy = useSelector((state) => state.orderListMy);
   const { error: errorOrderListMy, loading: loadingOrderListMy, orders } = orderListMy;
 
+
+
   useEffect(() => {
     if (!userInfo) {
       history.push('/login');
     } else {
       if (!user || !user.nickname) {
         dispatch({ type: USER_UPDATE_PROFILE_RESET });
-        dispatch(getUserDetails());
+        dispatch(getUserDetails(userInfo.id));
       } else {
         setFirstName(user.firstName);
         setLastName(user.lastName);
@@ -56,6 +58,16 @@ const ProfileScreen = ({ history }) => {
       let id = userInfo.id;
       dispatch(updateUserProfile({ id ,nickname, email, password }));
     }
+  };
+
+  const getStatusOptions = (order,statusName) => {
+    return order.orderStatusHistories.find( status => status.status === statusName);
+  };
+
+  const isContainsStatus = ( order, statusName) => {
+    return order.orderStatusHistories.includes( status => {
+      return status.status === statusName;
+    })
   };
 
   return (
@@ -125,7 +137,7 @@ const ProfileScreen = ({ history }) => {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>DATE</th>
+                <th>DATE AND TIME</th>
                 <th>TOTAL</th>
                 <th>PAID</th>
                 <th>DELIVERED</th>
@@ -134,16 +146,17 @@ const ProfileScreen = ({ history }) => {
             </thead>
             <tbody>
               {orders.map((order) => (
-                <tr key={order.orderId}>
-                  <td>{order.orderId}</td>
-                  <td>{order.created_at}</td>
+                <tr key={order.id}>
+                  <td>{order.id}</td>
+                  <td>{getStatusOptions(order,'CREATED').actualFrom}</td>
                   <td>{order.totalPrice}</td>
-                  <td>{order.paid ? order.paymentDate?.substring(0, 10) : <i className='fas fa-times' style={{ color: 'red' }}></i>}</td>
+
+                  <td>{isContainsStatus(order,'DELIVERING') ? getStatusOptions(order,'DELIVERING').actualFrom : <i className='fas fa-times' style={{ color: 'red' }}></i>}</td>
                   <td>
-                    {order.delivered ? order.deliveredDate?.substring(0, 10) : <i className='fas fa-times' style={{ color: 'red' }}></i>}
+                    {isContainsStatus(order,'DONE') ? getStatusOptions(order,'DONE').actualFrom : <i className='fas fa-times' style={{ color: 'red' }}></i>}
                   </td>
                   <td>
-                    <LinkContainer to={`/order/${order.orderId}`}>
+                    <LinkContainer to={`/order/${order.id}`}>
                       <Button className='btn-sm' variant='light'>
                         Details
                       </Button>

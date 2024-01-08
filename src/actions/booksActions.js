@@ -25,7 +25,10 @@ import {
     PRODUCT_TOP_FAIL,
     PRODUCT_IMAGE_REQUEST,
     PRODUCT_IMAGE_SUCCESS,
-    PRODUCT_IMAGE_FAIL
+    PRODUCT_IMAGE_FAIL,
+    BOOK_ADMIN_LIST_REQUEST,
+    BOOK_ADMIN_LIST_SUCCESS,
+    BOOK_ADMIN_LIST_FAIL
 } from '../constants/productConstants';
 import {getErrorMessage} from '../service/CommonUtils';
 import {
@@ -37,18 +40,18 @@ import {
     createBookApi,
     getImageApi,
     getBookApi,
-    getAllBooksDetailApi,
+    getAllBooksPageDetailApi,
     deleteBookApi,
-    searchBooksDetailApi
+    searchBooksDetailApi, getAllBooksDetailApi
 } from '../service/RestApiCalls';
 import {logout} from "./userActions";
 import {listProductDetailsAction} from "./productActions";
 
-export const listBooksAction = (pageNumber) => async (dispatch) => {
+export const listBooksActionWithPaginate = (pageNumber) => async (dispatch) => {
     try {
         dispatch({type: PRODUCT_LIST_REQUEST});
         //Get All Products Detail
-        const allProductsDetail = await getAllBooksDetailApi();
+        const allProductsDetail = await getAllBooksPageDetailApi(pageNumber);
         dispatch({
             type: PRODUCT_LIST_SUCCESS,
             payload: allProductsDetail,
@@ -61,6 +64,25 @@ export const listBooksAction = (pageNumber) => async (dispatch) => {
         });
     }
 };
+export const listBooksAction = () => async (dispatch) => {
+    try {
+        dispatch({type: BOOK_ADMIN_LIST_REQUEST});
+        debugger;
+        //Get All Book Detail
+        const allProductsDetail = await getAllBooksDetailApi();
+        dispatch({
+            type: BOOK_ADMIN_LIST_SUCCESS,
+            payload: allProductsDetail,
+            pageResponse: allProductsDetail
+        });
+    } catch (error) {
+        dispatch({
+            type: BOOK_ADMIN_LIST_FAIL,
+            payload: getErrorMessage(error)
+        });
+    }
+};
+
 
 export const searchBooksAction = (searchText, pageNumber) => async (dispatch) => {
     try {

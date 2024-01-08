@@ -19,7 +19,12 @@ import {
   ORDER_LIST_REQUEST,
   ORDER_DELIVER_FAIL,
   ORDER_DELIVER_SUCCESS,
-  ORDER_DELIVER_REQUEST
+  ORDER_DELIVER_REQUEST,
+  ORDER_STATUS_REQUEST,
+  ORDER_STATUS_SUCCESS,
+  ORDER_STATUS_FAIL,
+  ORDER_LIST_ALL_REQUEST,
+  ORDER_LIST_ALL_SUCCESS, ORDER_LIST_ALL_FAIL
 } from '../constants/orderConstants';
 import { getErrorMessage } from '../service/CommonUtils';
 import {
@@ -28,7 +33,7 @@ import {
   placeOrderApi,
   getOrderApi,
   getAllOrdersApi,
-  fillOrderByCartPositionsApi, getOrderById
+  fillOrderByCartPositionsApi, getOrderById, addOrderStatus, getAllOrders
 } from '../service/RestApiCalls';
 
 export const saveBillingAddressIdToLocalStorage = (billingAddressId) => (dispatch) => {
@@ -166,7 +171,6 @@ export const getOrderDetailsAction = (orderId) => async (dispatch) => {
     //Get Order by Id
     const getOrderData = await getOrderById(orderId);
 
-    debugger;
     dispatch({
       type: ORDER_DETAILS_SUCCESS,
       payload: getOrderData
@@ -174,6 +178,27 @@ export const getOrderDetailsAction = (orderId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: ORDER_DETAILS_FAIL,
+      payload: getErrorMessage(error)
+    });
+  }
+};
+
+export const  addOrderStatusAction = (statusBody,orderId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: ORDER_STATUS_REQUEST
+    });
+
+    //Get Order by Id
+    const addOrderData = await addOrderStatus(statusBody,orderId);
+
+    dispatch({
+      type: ORDER_STATUS_SUCCESS,
+      payload: addOrderData
+    });
+  } catch (error) {
+    dispatch({
+      type: ORDER_STATUS_FAIL,
       payload: getErrorMessage(error)
     });
   }

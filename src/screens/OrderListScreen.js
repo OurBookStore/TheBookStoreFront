@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Table, Button } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -16,6 +16,16 @@ const OrderListScreen = ({ history }) => {
     dispatch(listOrdersAdmin());
   }, [dispatch]);
 
+  const getStatusOptions = (order,statusName) => {
+    return order.orderStatusHistories.find( status => status.status === statusName);
+  };
+
+  const isContainsStatus = ( order, statusName) => {
+    return order.orderStatusHistories.includes( status => {
+      return status.status === statusName;
+    })
+  };
+
   return (
     <>
       <h1>Orders</h1>
@@ -26,34 +36,39 @@ const OrderListScreen = ({ history }) => {
       ) : (
         <Table striped bordered hover responsive className='table-sm'>
           <thead>
-            <tr>
-              <th>ID</th>
-              <th>DATE</th>
-              <th>TOTAL</th>
-              <th>PAID</th>
-              <th>DELIVERED</th>
-              <th></th>
-            </tr>
+          <tr>
+            <th>USERNAME</th>
+            <th>ID</th>
+            <th>DATE AND TIME</th>
+            <th>TOTAL</th>
+            <th>PAID</th>
+            <th>DELIVERED</th>
+            <th></th>
+          </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
-              <tr key={order.orderId}>
-                <td>{order.orderId}</td>
-                <td>{order.created_at.substring(0, 10)}</td>
-                <td>${order.totalPrice}</td>
-                <td>{order.paid ? order.paymentDate?.substring(0, 10) : <i className='fas fa-times' style={{ color: 'red' }}></i>}</td>
-                <td>
-                  {order.delivered ? order.deliveredDate?.substring(0, 10) : <i className='fas fa-times' style={{ color: 'red' }}></i>}
-                </td>
-                <td>
-                  <LinkContainer to={`/order/${order.orderId}`}>
-                    <Button variant='light' className='btn-sm'>
-                      Details
-                    </Button>
-                  </LinkContainer>
-                </td>
-              </tr>
-            ))}
+          {orders.map((order) => (
+            <tr key={order.id}>
+              <td>{order.appUser.nickname}</td>
+              <td>{order.id}</td>
+              <td>{getStatusOptions(order, 'CREATED').actualFrom}</td>
+              <td>{order.totalPrice}</td>
+
+              <td>{isContainsStatus(order, 'DELIVERING') ? getStatusOptions(order, 'DELIVERING').actualFrom :
+                <i className='fas fa-times' style={{ color: 'red' }}></i>}</td>
+              <td>
+                {isContainsStatus(order, 'DONE') ? getStatusOptions(order, 'DONE').actualFrom :
+                  <i className='fas fa-times' style={{ color: 'red' }}></i>}
+              </td>
+              <td>
+                <LinkContainer to={`/order/${order.id}`}>
+                  <Button className='btn-sm' variant='light'>
+                    Details
+                  </Button>
+                </LinkContainer>
+              </td>
+            </tr>
+          ))}
           </tbody>
         </Table>
       )}
