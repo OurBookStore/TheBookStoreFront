@@ -32,7 +32,11 @@ const AuthorsEditScreen = ({match, history}) => {
     let authorDetails = useSelector((state) => state.productDetails);
     let {loading, error, product} = authorDetails;
 
+    // product.fullName = undefined;
+
     // let file = match.target.files[0];
+
+    console.log("---->0")
 
     const productUpdate = useSelector((state) => state.productUpdate);
     const {loading: loadingUpdate, error: errorUpdate, success: successUpdate} = productUpdate;
@@ -43,7 +47,11 @@ const AuthorsEditScreen = ({match, history}) => {
             dispatch({type: PRODUCT_UPDATE_RESET});
             history.push('/admin/authors');
         } else {
+            console.log("---->1")
+            console.log("!product?.fullName ", product?.fullName)
             if (!product?.fullName) {
+                console.log("---->2")
+                // window.location.reload();
                 dispatch(getAuthorAction(authorId));
             } else {
                 setFullName(product.fullName);
@@ -85,7 +93,12 @@ const AuthorsEditScreen = ({match, history}) => {
 
     return (
         <>
-            <Link to='/admin/authors' className='btn btn-dark my-3'>
+            <Link to='/admin/authors' className='btn btn-dark my-3'
+                  onClick={(e) => {
+                      product.fullName = undefined;
+                      return e;
+                  }
+            }>
                 Go Back
             </Link>
             <h1>Edit Author</h1>

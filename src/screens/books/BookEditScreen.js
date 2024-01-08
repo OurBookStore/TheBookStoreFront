@@ -83,7 +83,12 @@ const BookEditScreen = ({match, history}) => {
 
     return (
         <>
-            <Link to='/admin/books' className='btn btn-dark my-3'>
+            <Link to='/admin/books' className='btn btn-dark my-3'
+                  onClick={(e) => {
+                      product.name = undefined;
+                      return e;
+                  }}
+            >
                 Go Back
             </Link>
             <h1>Edit Book</h1>
