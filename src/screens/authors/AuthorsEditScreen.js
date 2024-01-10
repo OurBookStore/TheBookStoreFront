@@ -63,6 +63,7 @@ const AuthorsEditScreen = ({match, history}) => {
     }, [dispatch, history, authorId, product, successUpdate]);
 
     const submitHandler = (e) => {
+        product.fullName = undefined;
         dispatch(
             updateAuthorAction({
                 id: authorId,

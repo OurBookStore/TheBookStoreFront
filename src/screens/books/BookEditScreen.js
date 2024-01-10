@@ -71,6 +71,7 @@ const BookEditScreen = ({match, history}) => {
     };
 
     const submitHandler = (e) => {
+        product.name = undefined;
         dispatch(
             updateBookAction({
                 id: bookId,
