@@ -16,7 +16,7 @@ import {
 import Loader from "../components/Loader";
 import {TextField} from "@material-ui/core";
 
-const BOOK_PER_PAGE = 1;
+const BOOK_PER_PAGE = 3;
 
 const HomeBookScreen = () => {
 
