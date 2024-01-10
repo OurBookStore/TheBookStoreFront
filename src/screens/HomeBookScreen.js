@@ -127,7 +127,12 @@ const HomeBookScreen = () => {
                                                 placeholder='Enter name of book or name of author'
                                                 value={searchText}
                                                 onChange={(e) => setSearchText(e.target.value)}
-                                                // onKeyPress={(e) => searchBooks()}
+                                                onKeyPress={(e) => {
+                                                    if(e.key === "Enter") {
+                                                        searchBooks()
+                                                    }
+                                                }
+                                            }
                                             >
                                             </Form.Control>
                                         </Col>
