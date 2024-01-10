@@ -16,7 +16,7 @@ import {
 import Loader from "../components/Loader";
 import {TextField} from "@material-ui/core";
 
-const BOOK_PER_PAGE = 3;
+const BOOK_PER_PAGE = 1;
 
 const HomeBookScreen = () => {
 
@@ -127,7 +127,7 @@ const HomeBookScreen = () => {
                                                 placeholder='Enter name of book or name of author'
                                                 value={searchText}
                                                 onChange={(e) => setSearchText(e.target.value)}
-                                                onKeyPress={(e) => searchBooks()}
+                                                // onKeyPress={(e) => searchBooks()}
                                             >
                                             </Form.Control>
                                         </Col>
