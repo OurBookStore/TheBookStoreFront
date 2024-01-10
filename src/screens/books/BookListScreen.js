@@ -81,6 +81,7 @@ const BookListScreen = ({history, match}) => {
                             <th>NAME</th>
                             <th>PRICE</th>
                             <th>COUNT</th>
+                            <th>AUTHORS</th>
                             <th>IMAGE ID</th>
                             <th>IMAGE</th>
                             <th></th>
@@ -93,6 +94,7 @@ const BookListScreen = ({history, match}) => {
                                 <td>{book.name}</td>
                                 <td>${book.price}</td>
                                 <td>{book.count}</td>
+                                <td>{book.authors.map((author)=>(author.id)).toString()}</td>
                                 <td>{book.image}</td>
                                 <td>
                                     <img
